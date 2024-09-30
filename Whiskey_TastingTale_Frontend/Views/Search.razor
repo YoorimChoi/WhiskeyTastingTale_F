@@ -1,0 +1,42 @@
+﻿@page "/search"
+@using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.ViewModels
+@inject SearchViewModel ViewModel 
+@inject NavigationManager NavigationManager
+
+
+    <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
+
+    <MudGrid Spacing="1" Class="pt-2">
+        @foreach (Whiskey product in ViewModel.SearchResult)
+        {
+            <MudItem xs="12" sm="6" md="4" @onclick="@(() => HandleItemClick(product))">
+                <MudCard Class="card-fixed-size">
+                    <MudCardMedia Image=@GetFullImageUrl(product.img_index) Class = "image-fit"   />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5" Class="text-ellipsis">@product.whiskey_name</MudText>
+                        <RatingComponent RatingValue=(decimal)3.7></RatingComponent>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+
+    private async void HandleItemClick(Whiskey product)
+    {
+        await ViewModel.ClickedItem(product); 
+        NavigationManager.NavigateTo("/details"); 
+    }
+}

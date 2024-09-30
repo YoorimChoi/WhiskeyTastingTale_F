@@ -1,0 +1,39 @@
+﻿@using Whiskey_TastingTale_Frontend.ViewModels
+@inject LoginViewModel ViewModel
+@inject NavigationManager NavigationManager
+@page "/login"
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 400px; margin: auto; margin-top: 100px;">
+    <MudText Typo="Typo.h5" GutterBottom="true">로그인</MudText>
+    <MudForm @ref="form">
+        <MudTextField T="string" Label="사용자 이름" Variant="Variant.Outlined" @bind-Value="ViewModel.Email" Required="true" FullWidth="true" />
+        <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" @bind-Value="ViewModel.Password" InputType="InputType.Password" Required="true" FullWidth="true" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="HandleLogin" Class="mt-4">로그인</MudButton>
+    </MudForm>
+</MudPaper>
+
+@code {
+    private MudForm form;
+
+    private async Task HandleLogin()
+    {
+        await form.Validate();
+
+        if (form.IsValid)
+        {
+            Console.WriteLine($"Username: {ViewModel.Email}");
+            Console.WriteLine($"Password: {ViewModel.Password}");
+            // 로그인 로직을 구현하세요.
+            var result = await ViewModel.RequestLogin(); 
+            if (result == true)  {
+                NavigationManager.NavigateTo("/home");
+            }
+            
+        }
+        else
+        {
+            Console.WriteLine("폼 유효성 검사 실패");
+            // 유효성 검사 실패 처리
+        }
+    }
+}

@@ -1,0 +1,48 @@
+﻿@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@using Whiskey_TastingTale_Frontend.Views
+
+@inherits LayoutComponentBase
+@inject UserState State 
+@inject NavigationManager NavigationManager
+@inject SearchViewModel ViewModel
+<MudThemeProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudAvatar Src="images/icon.png" Alt="Description of your image" />
+
+        <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
+        <MudSpacer />
+        @{
+            if(State.Token != null)
+            {
+                <MudGrid Justify="Justify.Center" Style="padding: 20px;">
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="searchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                                      OnKeyUp="@HandleKeyPress" />
+                    </MudItem>
+                </MudGrid>
+                <MudSpacer />
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+            }
+        }
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private string searchWord { get; set; } 
+
+    private void HandleKeyPress(KeyboardEventArgs args)
+    {
+
+        if (args.Key == "Enter")
+        {
+            ViewModel.SearchWord = searchWord;
+            NavigationManager.NavigateTo("/search", forceLoad: true);
+        }
+    }
+}

@@ -1,0 +1,20 @@
+﻿@page "/"
+
+@using Whiskey_TastingTale_Frontend.Services
+@inject NavigationManager NavigationManager
+@inject UserState State 
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (State.Email ==  null )
+        {
+            NavigationManager.NavigateTo("/login", replace: true);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/home", replace: true);
+        }
+    }
+}
+ 

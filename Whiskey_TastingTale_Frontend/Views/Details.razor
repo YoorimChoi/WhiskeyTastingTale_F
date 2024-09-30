@@ -1,0 +1,72 @@
+﻿@page "/details"
+@using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.ViewModels
+@inject DetailsViewModel ViewModel
+@inject NavigationManager NavigationManager
+
+<MudCard >
+    <MudCardMedia Image=@GetFullImageUrl(ViewModel.Selected.img_index)  />
+    <MudCardContent>
+        <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
+        <MudStack Row="true">
+            <RatingComponent RatingValue=(decimal)3.4></RatingComponent>
+            <MudText Typo="Typo.body2"> 3.4 / 5개의 리뷰 </MudText>
+        </MudStack>
+        <MudStack Row="true">
+            <MudText Typo="Typo.body2"><b>도수</b></MudText>
+            <MudText Typo="Typo.body2" >@ViewModel.Selected.alcohol_degree%</MudText>
+        </MudStack>
+        <MudStack Row="true">
+            <MudText Typo="Typo.body2"><b>제조사</b></MudText>
+            <MudText Typo="Typo.body2">@ViewModel.Selected.maker </MudText>
+        </MudStack>
+        <MudText Typo="Typo.body2"><b>설명</b></MudText>
+        <MudText Typo="Typo.body2" >@ViewModel.Selected.details</MudText>
+    </MudCardContent>
+</MudCard>
+<MudCard>
+    <MudCardContent>
+        <MudStack Row="true" Justify="Justify.FlexStart">
+            <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+            <MudText Typo="Typo.body2"> <b>리뷰 (5)</b>  </MudText>
+            <div style="flex-grow: 1;"></div> 
+            <MudIconButton 
+                Icon="@Icons.Material.Filled.ArrowForwardIos" 
+                Size="Size.Small"
+                OnClick="@ShowMoreReview"
+                ></MudIconButton>
+        </MudStack>
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.body2" > @ViewModel.FirstReview.user_id </MudText>
+                <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudCardContent>
+</MudCard>
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
+    <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
+    <MudSpacer />
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary"> 리뷰 작성하기</MudButton>
+    <MudSpacer />
+</MudAppBar>
+
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+
+    private void ShowMoreReview()
+    {
+        NavigationManager.NavigateTo("/reviews"); 
+    }
+
+}
