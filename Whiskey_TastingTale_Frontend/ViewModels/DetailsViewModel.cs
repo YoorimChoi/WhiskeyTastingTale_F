@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Whiskey_TastingTale_Backend.API.DTOs;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
 
@@ -15,8 +16,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         }
 
         private Whiskey selected = new Whiskey();
-        private List<Review> reviews = new List<Review>();
-        private Review firstReview = new Review(); 
+        private List<ReviewUserDTO> reviews = new List<ReviewUserDTO>();
+        private ReviewUserDTO firstReview = new ReviewUserDTO(); 
 
         public Whiskey Selected
         {
@@ -28,7 +29,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             }
         }
 
-        public Review FirstReview
+        public ReviewUserDTO FirstReview
         {
             get => firstReview;
             set
@@ -38,7 +39,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             }
         }
 
-        public List<Review> Reviews
+        public List<ReviewUserDTO> Reviews
         {
             get => reviews;
             set
@@ -58,11 +59,11 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task LoadData()
         {
             Selected = _whiskeyState.Selected;
-            var response = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/" + Selected.whiskey_id);
+            var response = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/whiskey/" + Selected.whiskey_id);
 
             if (response != null)
             {
-                Reviews = JsonConvert.DeserializeObject<List<Review>>(response.ToString());
+                Reviews = JsonConvert.DeserializeObject<List<ReviewUserDTO>>(response.ToString());
                 FirstReview = Reviews.FirstOrDefault(); 
             }
         }

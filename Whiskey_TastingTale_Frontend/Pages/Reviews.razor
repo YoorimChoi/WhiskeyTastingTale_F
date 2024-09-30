@@ -27,8 +27,11 @@
     </MudCardContent>
 </MudCard>
 
+
 <MudGrid Spacing="1" Class="pt-2">
-    @foreach (Review review in ViewModel.Reviews)
+    @if(ViewModel.Reviews.Count != 0)
+    {
+        @foreach (ReviewUserDTO review in ViewModel.Reviews)
     {
         <MudItem xs="12" sm="12" md="12">
             <MudCard>
@@ -36,16 +39,22 @@
                     <MudStack>
                         <RatingComponent RatingValue=3.7></RatingComponent>
                         <MudStack>
-                            <MudText Typo="Typo.body2" > @review.user_id </MudText>
-                            <MudText Typo="Typo.body2" > @review.updated_date </MudText>
-                            <MudText Typo="Typo.body2" > @review.review_text  </MudText>
+                                <MudStack Row="true">
+                                    <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
+                                    <MudText Typo="Typo.overline"> @review.updated_date </MudText>
+                                    <MudSpacer></MudSpacer>
                                     <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
                         </MudStack>
+
+                                <MudText Typo="Typo.body2"> @review.review_text  </MudText>
+                            </MudStack>
                     </MudStack>
                 </MudCardContent>
             </MudCard>
         </MudItem>
     }
+    }
+    
 </MudGrid>
 
 
