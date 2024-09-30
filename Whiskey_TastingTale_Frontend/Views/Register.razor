@@ -1,0 +1,53 @@
+﻿@* @using System.Text.Json
+@using Whiskey_TastingTale_Frontend.ViewModels
+
+@inject RegisterViewModel ViewModel
+@inject EventConsole console 
+
+<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
+    <RadzenTemplateForm TItem="RegisterViewModel" Data=@ViewModel Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+            <RadzenStack Gap="1rem" class="rz-p-sm-12">
+                <RadzenFormField Text="First Name" Variant="@variant">
+                    <ChildContent>
+                        <RadzenTextBox Name="Email" @bind-Value=@ViewModel.Email/>
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Email" Text="Email is required." />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Password" Variant="@variant">
+                    <ChildContent>
+                    <RadzenTextBox Name="Password" @bind-Value=@ViewModel.Password />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Password" Text="Password is required." />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenFormField Text="Nickname" Variant="@variant">
+                    <ChildContent>
+                    <RadzenTextBox Name="Nickname" @bind-Value=@ViewModel.Nickname />
+                    </ChildContent>
+                    <Helper>
+                        <RadzenRequiredValidator Component="Nickname" Text="Nickname is required." />
+                    </Helper>
+                </RadzenFormField>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
+            </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenCard> 
+
+
+@code {
+    Variant variant = Variant.Outlined;
+
+    void OnSubmit(RegisterViewModel model)
+    {
+        console.Log($"Submit: {JsonSerializer.Serialize(model, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        console.Log($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+}
+ *@
