@@ -1,5 +1,5 @@
 ﻿<MudStack Row="true" Spacing="0">
-    @for (int i = 0; i < Decimal.Floor(RatingValue); i++)
+    @for (int i = 0; i < Double.Floor(RatingValue); i++)
     {
         <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Warning" />
         NumberOfStars++;
@@ -14,17 +14,18 @@
             <MudIcon Icon="@Icons.Material.Filled.StarHalf" Color="Color.Warning" />
             NumberOfStars++;
         }
+    }
 
-        @for (int i = NumberOfStars; i < 5; i++)
-        {
-            <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Default" />
-        }
+
+    @for (int i = NumberOfStars; i < 5; i++)
+    {
+        <MudIcon Icon="@Icons.Material.Filled.Star" Color="Color.Default" />
     }
 </MudStack>
 
 @code {
     [Parameter]
-    public decimal RatingValue { get; set; }
+    public double RatingValue { get; set; }
 
     protected int NumberOfStars { get; set; }
 }
