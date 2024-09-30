@@ -1,8 +1,18 @@
 ﻿@page "/reviews"
+@using Whiskey_TastingTale_Backend.API.DTOs
 @using Whiskey_TastingTale_Backend.Model
 @using Whiskey_TastingTale_Frontend.ViewModels
+@using Whiskey_TastingTale_Frontend.Components
 @inject DetailsViewModel ViewModel
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+    <MudSpacer></MudSpacer>
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+</MudAppBar>
 
 <MudCard Class="card-fixed-size">
     <MudCardContent>
@@ -32,34 +42,41 @@
     @if(ViewModel.Reviews.Count != 0)
     {
         @foreach (ReviewUserDTO review in ViewModel.Reviews)
-    {
-        <MudItem xs="12" sm="12" md="12">
-            <MudCard>
-                <MudCardContent>
-                    <MudStack>
-                        <RatingComponent RatingValue=3.7></RatingComponent>
+        {
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard>
+                    <MudCardContent>
                         <MudStack>
+                            <MudStack>
                                 <MudStack Row="true">
                                     <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
                                     <MudText Typo="Typo.overline"> @review.updated_date </MudText>
                                     <MudSpacer></MudSpacer>
                                     <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
-                        </MudStack>
+                                </MudStack>
 
                                 <MudText Typo="Typo.body2"> @review.review_text  </MudText>
                             </MudStack>
-                    </MudStack>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    }
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
     }
     
 </MudGrid>
-
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
+    <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
+    <MudSpacer />
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary"> 리뷰 작성하기</MudButton>
+</MudAppBar>
 
 
 @code {
+    private async Task GoBack()
+    {
+        await JSRuntime.InvokeVoidAsync("goBack");
+    }
     private string GetFullImageUrl(string imagePath)
     {
         return "https://localhost:7299/images/" + imagePath;
