@@ -15,8 +15,10 @@
                     <MudCardMedia Image=@GetFullImageUrl(product.img_index) Class = "image-fit"   />
                     <MudCardContent>
                         <MudText Typo="Typo.h5" Class="text-ellipsis">@product.whiskey_name</MudText>
-                        <RatingComponent RatingValue=(decimal)3.7></RatingComponent>
-                                <RatingComponent RatingValue=3.7></RatingComponent>
+                            <MudStack Row="true">
+                                <RatingComponent RatingValue=product.rating> </RatingComponent>
+                                <MudText> @product.rating 점 / @product.review_count 개 </MudText>
+                            </MudStack>
                     </MudCardContent>
                 </MudCard>
             </MudItem>

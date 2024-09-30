@@ -9,7 +9,7 @@
     <MudCardContent>
         <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
         <MudStack Row="true">
-                <RatingComponent RatingValue=3.5></RatingComponent>
+                <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
             <MudText Typo="Typo.body2"> 3.4 / 5개의 리뷰 </MudText>
         </MudStack>
         <MudStack Row="true">
@@ -39,6 +39,7 @@
         <MudCard>
             <MudCardContent>
                 <MudText Typo="Typo.body2" > @ViewModel.FirstReview.user_id </MudText>
+                    <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
                 <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
             </MudCardContent>
         </MudCard>
