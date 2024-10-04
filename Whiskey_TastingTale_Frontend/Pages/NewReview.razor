@@ -11,29 +11,27 @@
 
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
-    <MudSpacer></MudSpacer>
-    <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
 </MudAppBar>
 <div style="display: flex; justify-content: center; width: 100%;">
     <MudCard Style="margin:20px; max-width:600px; min-width:600px">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.Center">
                 <MudStack AlignItems="AlignItems.Center">
-                    <MudImage Src=@GetFullImageUrl(ViewModel.Selected.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+                    <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
                 </MudStack>
                 <MudStack>
-                    <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
+                    <MudText Typo="Typo.h5">@ViewModel.SelectedWhiskey.whiskey_name</MudText>
                     <MudStack Row="true">
-                        <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
-                        <MudText Typo="Typo.body2"> @Double.Round(ViewModel.Selected.rating, 1) 점 / @ViewModel.Selected.review_count 개의 리뷰 </MudText>
+                        <RatingComponent RatingValue=@ViewModel.SelectedWhiskey.rating></RatingComponent>
+                        <MudText Typo="Typo.body2"> @Double.Round(ViewModel.SelectedWhiskey.rating, 1) 점 / @ViewModel.SelectedWhiskey.review_count 개의 리뷰 </MudText>
                     </MudStack>
                     <MudStack Row="true">
                         <MudText Typo="Typo.body2"><b>도수</b></MudText>
-                        <MudText Typo="Typo.body2">@ViewModel.Selected.alcohol_degree%</MudText>
+                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.alcohol_degree%</MudText>
                     </MudStack>
                     <MudStack Row="true">
                         <MudText Typo="Typo.body2"><b>제조사</b></MudText>
-                        <MudText Typo="Typo.body2">@ViewModel.Selected.maker </MudText>
+                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.maker </MudText>
                     </MudStack>
                 </MudStack>
             </MudStack>
@@ -44,11 +42,10 @@
     <MudCard Style="min-width:600px; max-width:600px;">
         <MudCardContent>
             <MudRating @bind-SelectedValue="ViewModel.SelectedRating"> </MudRating>
-            <MudTextField T="string" Label="한줄평" Variant="Variant.Outlined" @bind-Value="ViewModel.Review" Lines="3" />
+            <MudTextField T="string" Label="한줄평" Variant="Variant.Outlined" @bind-Value="ViewModel.ReviewText" Lines="3" />
         </MudCardContent>
     </MudCard>
     <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
         <MudSpacer />
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddReview"> 리뷰 작성 완료</MudButton>
     </MudAppBar>
