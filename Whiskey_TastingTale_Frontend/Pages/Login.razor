@@ -21,9 +21,6 @@
 
         if (form.IsValid)
         {
-            Console.WriteLine($"Username: {ViewModel.Email}");
-            Console.WriteLine($"Password: {ViewModel.Password}");
-            // 로그인 로직을 구현하세요.
             var result = await ViewModel.RequestLogin(); 
             if (result == true)  {
                 NavigationManager.NavigateTo("/home");
