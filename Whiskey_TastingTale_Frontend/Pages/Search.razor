@@ -7,33 +7,31 @@
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 
+<MudStack>
+    <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
 
-<MudCard>
-    <MudCardContent>
-        <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
-
-        <MudGrid Spacing="1" Class="pt-2">
-            @foreach (Whiskey product in ViewModel.SearchResult)
-            {
-                <MudItem xs="12" sm="6" md="4" @onclick="@(() => HandleItemClick(product))">
-                    <MudCard Class="card-fixed-size">
-                        <MudCardMedia Image=@GetFullImageUrl(product.img_index) Class = "image-fit"   />
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5" Class="text-ellipsis">@product.whiskey_name</MudText>
-                            <MudStack Row="true">
-                                <RatingComponent RatingValue=product.rating> </RatingComponent>
+    <MudGrid Spacing="1" Class="pt-2">
+        @foreach (Whiskey product in ViewModel.SearchResult)
+        {
+            <MudItem xs="12" sm="6" md="4" @onclick="@(() => HandleItemClick(product))">
+                <MudCard Class="card-fixed-size">
+                    <MudCardContent>
+                        <MudStack AlignItems="AlignItems.Center">
+                            <MudImage Src=@GetFullImageUrl(product.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+                        </MudStack>
+                        <MudText Typo="Typo.h5" Class="text-ellipsis">@product.whiskey_name</MudText>
+                        <MudStack Row="true">
+                            <RatingComponent RatingValue=product.rating> </RatingComponent>
                             <MudText Class="text-ellipsis">
                                 @Double.Round(product.rating, 1) 점 / @product.review_count 개의 리뷰
                             </MudText>
-                            </MudStack>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-            }
-        </MudGrid>
-    </MudCardContent>
-</MudCard>
-
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudStack>
 @code {
     protected override async Task OnInitializedAsync()
     {
@@ -49,6 +47,6 @@
     {
         await ViewModel.ClickedItem(product); 
         PageState.PriviousPage = "/search";
-        NavigationManager.NavigateTo("/details"); 
+        NavigationManager.NavigateTo("/details");
     }
 }

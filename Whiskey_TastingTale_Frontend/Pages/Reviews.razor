@@ -14,11 +14,14 @@
     <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
 </MudAppBar>
 
-<MudCard Class="card-fixed-size">
+<div style="display: flex; justify-content: center; width: 100%;">
+<MudCard Style="margin:20px; max-width:600px; min-width:600px">
     <MudCardContent>
-        <MudStack Row="true" Justify="Justify.SpaceAround">
-            <MudCardMedia Image=@GetFullImageUrl(ViewModel.Selected.img_index) Class="image-fit"/>
-            <MudStack>
+        <MudStack Row="true" Justify="Justify.Center">
+            <MudStack AlignItems="AlignItems.Center">
+                <MudImage Src=@GetFullImageUrl(ViewModel.Selected.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+            </MudStack>
+            <MudStack >
                 <MudText Typo="Typo.h5" >@ViewModel.Selected.whiskey_name</MudText>
                 <MudStack Row="true">
                     <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
@@ -36,10 +39,11 @@
         </MudStack>
     </MudCardContent>
 </MudCard>
+</div>
+<div style="display: flex; justify-content: center; width: 100%;">
 
-
-<MudGrid Spacing="1" Class="pt-2">
-    @if(ViewModel.Reviews.Count != 0)
+    <MudGrid Spacing="1" Style="margin-bottom:100px; max-width:600px">
+    @if (ViewModel.Reviews.Count != 0)
     {
         @foreach (ReviewUserDTO review in ViewModel.Reviews)
         {
@@ -65,6 +69,8 @@
     }
     
 </MudGrid>
+</div>
+
 <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
     <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
     <MudSpacer />

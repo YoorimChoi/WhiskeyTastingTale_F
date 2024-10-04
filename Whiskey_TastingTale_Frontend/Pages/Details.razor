@@ -13,9 +13,13 @@
     <MudSpacer></MudSpacer>
     <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
 </MudAppBar>
-<MudStack> 
-    <MudCard >
-        <MudCardMedia Image=@GetFullImageUrl(ViewModel.Selected.img_index)  />
+<div style="display: flex; justify-content: center; width: 100%;">
+
+<MudStack > 
+    <MudCard Style="margin:20px;max-width:600px;">
+        <MudStack AlignItems="AlignItems.Center">
+            <MudImage Src=@GetFullImageUrl(ViewModel.Selected.img_index) ObjectFit="ObjectFit.Contain" Height="300"></MudImage>
+        </MudStack>
         <MudCardContent>
             <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
             <MudStack Row="true">
@@ -36,7 +40,7 @@
             <MudText Typo="Typo.body2" >@ViewModel.Selected.details</MudText>
         </MudCardContent>
     </MudCard>
-    <MudCard>
+    <MudCard Style="margin:20px; margin-bottom:100px">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
                 <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
@@ -46,7 +50,8 @@
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
                     Size="Size.Small"
                     OnClick="@ShowMoreReview"
-                    ></MudIconButton>
+                    >
+                </MudIconButton>
             </MudStack>
             <MudCard>
                 <MudCardContent>
@@ -55,16 +60,14 @@
                     <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
                 </MudCardContent>
             </MudCard>
-        </MudCardContent>
-    </MudCard>
-    <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
+    <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" >
         <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
         <MudSpacer />
         <MudButton Variant="Variant.Filled" Color="Color.Secondary"> 리뷰 작성하기</MudButton>
     </MudAppBar>
 
 </MudStack>
-
+</div>
 @code {
     protected override async Task OnInitializedAsync()
     {
