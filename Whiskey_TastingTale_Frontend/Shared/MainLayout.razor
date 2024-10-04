@@ -21,7 +21,7 @@
             {
                 <MudGrid Justify="Justify.Center" Style="padding: 20px;">
                     <MudItem xs="12" sm="6">
-                        <MudTextField @bind-Value="searchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                <MudTextField @bind-Value="ViewModel.SearchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                                       OnKeyUp="@HandleKeyPress" />
                     </MudItem>
                 </MudGrid>
@@ -36,15 +36,14 @@
 </MudLayout>
 
 @code {
-    private string searchWord { get; set; } 
+
 
     private void HandleKeyPress(KeyboardEventArgs args)
     {
 
         if (args.Key == "Enter")
         {
-            ViewModel.SearchWord = searchWord;
-            NavigationManager.NavigateTo("/search", forceLoad: true);
+            NavigationManager.NavigateTo("/search", forceLoad:true);
         }
     }
 }
