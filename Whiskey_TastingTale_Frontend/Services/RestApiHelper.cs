@@ -6,7 +6,7 @@ namespace Whiskey_TastingTale_Frontend.Services
     public static class RestApiHelper
     {
         public static string server_uri = "https://localhost:7299/";
-        public static async Task<object> Delete(string url, object data)
+        public static async Task<object> Delete(string url)
         {
             object result = null;
             Exception badEx = null;
@@ -16,10 +16,6 @@ namespace Whiskey_TastingTale_Frontend.Services
                 string apiUrl = url;
                 bool badStatus = false;
                 string badMessage = "";
-
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-
-                var test = JsonConvert.SerializeObject(data);
 
                 //TODO : url 이랑 연결 안되면 죽는 이슈 
                 var response = await client.DeleteAsync(apiUrl);
