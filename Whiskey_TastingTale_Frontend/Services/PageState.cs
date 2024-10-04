@@ -5,24 +5,19 @@ namespace Whiskey_TastingTale_Frontend.Services
 {
     public class PageState
     {
-        private string priviousPage = String.Empty; 
+        private Stack<string> priviousPages = new Stack<string>();
         public string PriviousPage
         {
             get
             {
-                return priviousPage;
+                if (priviousPages.Count == 0) return "/"; 
+                return priviousPages.Pop();
             }
             set
             {
-                priviousPage = value;
-                NotifyStateChanged();
+                priviousPages.Push(value);
             }
         }
-
-        public event Action OnChange;
-
-        private void NotifyStateChanged() => OnChange?.Invoke();
-
     }
 
 

@@ -13,7 +13,7 @@ builder.Services.AddSingleton<DetailsViewModel>();
 
 
 builder.Services.AddSingleton<UserState>();
-builder.Services.AddScoped<PageState>();
+builder.Services.AddSingleton<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
 
 var app = builder.Build();

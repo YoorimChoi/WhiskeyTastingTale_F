@@ -1,8 +1,7 @@
-﻿using Microsoft.JSInterop;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Whiskey_TastingTale_Backend.API.DTOs;
+using Whiskey_TastingTale_Backend.Data.Entities;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
 
@@ -19,22 +18,21 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             _userState = userState;
         }
 
-        private Whiskey selected = new Whiskey();
+        private Whiskey selectedWhiskey = new Whiskey();
         private List<ReviewUserDTO> reviews = new List<ReviewUserDTO>();
         private ReviewUserDTO firstReview = new ReviewUserDTO();
-        private int selectedRating = 0;
-        private string review = String.Empty; 
+        private Review writingReview = new Review();
+        private Wish wishCheck;
 
-        public Whiskey Selected
+        public Whiskey SelectedWhiskey
         {
-            get => selected;
+            get => selectedWhiskey;
             set
             {
-                selected = value;
-                OnPropertyChanged(nameof(Selected));
+                selectedWhiskey = value;
+                OnPropertyChanged(nameof(SelectedWhiskey));
             }
         }
-
         public ReviewUserDTO FirstReview
         {
             get => firstReview;
@@ -44,7 +42,6 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 OnPropertyChanged(nameof(FirstReview));
             }
         }
-
         public List<ReviewUserDTO> Reviews
         {
             get => reviews;
@@ -54,26 +51,37 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 OnPropertyChanged(nameof(Reviews));
             }
         }
-
         public int SelectedRating
         {
-            get { return selectedRating; }
+            get { return writingReview.rating; }
             set
             {
-                selectedRating = value;
+                writingReview.rating = value;
                 OnPropertyChanged(nameof(SelectedRating));
             }
         }
-
-        public string Review
+        public string ReviewText
         {
-            get { return review; }
+            get { return writingReview.review_text; }
             set
             {
-                review = value;
-                OnPropertyChanged(nameof(Review));
+                writingReview.review_text = value;
+                OnPropertyChanged(nameof(ReviewText));
             }
         }
+        public Wish WishCheck
+        {
+            get
+            {
+                return wishCheck;
+            }
+            set
+            {
+                wishCheck = value;
+                OnPropertyChanged(nameof(WishCheck));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -83,19 +91,26 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-            Selected = _whiskeyState.Selected;
-            var whiskey = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/" + Selected.whiskey_id);
+            SelectedWhiskey = _whiskeyState.Selected;
+            var whiskey = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/" + SelectedWhiskey.whiskey_id);
             if (whiskey != null)
             {
-                Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey.ToString());
+                SelectedWhiskey = JsonConvert.DeserializeObject<Whiskey>(whiskey.ToString());
             }
 
-            var response = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/whiskey/" + Selected.whiskey_id);
+            var review = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/whiskey/" + SelectedWhiskey.whiskey_id);
 
-            if (response != null)
+            if (review != null)
             {
-                Reviews = JsonConvert.DeserializeObject<List<ReviewUserDTO>>(response.ToString());
+                Reviews = JsonConvert.DeserializeObject<List<ReviewUserDTO>>(review.ToString());
                 FirstReview = Reviews.FirstOrDefault(); 
+            }
+
+            var wish_response = await RestApiHelper.Get(RestApiHelper.server_uri + "Wish/" + _userState.UserId + "/" + SelectedWhiskey.whiskey_id);
+
+            if (wish_response != null)
+            {
+                WishCheck = JsonConvert.DeserializeObject<Wish>(wish_response.ToString());
             }
         }
 
@@ -104,10 +119,35 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             var response = await RestApiHelper.Post(RestApiHelper.server_uri + "Review/", new Review
             {
                 user_id = _userState.UserId,
-                whiskey_id = Selected.whiskey_id,
+                whiskey_id = SelectedWhiskey.whiskey_id,
                 rating = SelectedRating, 
-                review_text = Review
+                review_text = ReviewText
             });
+        }
+
+        public async Task changeWishCheck()
+        {
+            if (WishCheck != null)
+            {
+                var response = await RestApiHelper.Delete(RestApiHelper.server_uri + "Wish/" + WishCheck.wish_id);
+                if (JsonConvert.DeserializeObject<Wish>(response.ToString()) != null)
+                {
+                    WishCheck = null;
+                }
+            }
+            else
+            {
+                var response = await RestApiHelper.Post(RestApiHelper.server_uri + "Wish/", new Wish
+                {
+                    user_id = _userState.UserId,
+                    whiskey_id = SelectedWhiskey.whiskey_id
+                });
+                if (response != null)
+                {
+                    WishCheck = JsonConvert.DeserializeObject<Wish>(response.ToString());
+                }
+            }
+
         }
     }
 

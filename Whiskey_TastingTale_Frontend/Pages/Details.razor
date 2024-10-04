@@ -5,73 +5,93 @@
 @using Whiskey_TastingTale_Frontend.Components
 @inject DetailsViewModel ViewModel
 @inject PageState PageState
+@inject UserState UserState
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
     <MudSpacer></MudSpacer>
-    <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+    @{
+        if (UserState.Token != null)
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">login</MudButton>
+        }
+    }
 </MudAppBar>
 <div style="display: flex; justify-content: center; width: 100%;">
-
-<MudStack > 
-    <MudCard Style="margin:20px;max-width:600px;">
-        <MudStack AlignItems="AlignItems.Center">
-            <MudImage Src=@GetFullImageUrl(ViewModel.Selected.img_index) ObjectFit="ObjectFit.Contain" Height="300"></MudImage>
-        </MudStack>
-        <MudCardContent>
-            <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
-            <MudStack Row="true">
-                <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
-                <MudText Typo="Typo.body2">
-                    @Double.Round(ViewModel.Selected.rating, 1) 점 / @ViewModel.Selected.review_count 개의 리뷰
-                </MudText>
+    <MudStack > 
+        <MudCard Style="margin:20px;max-width:600px;">
+            <MudStack AlignItems="AlignItems.Center">
+                <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) ObjectFit="ObjectFit.Contain" Height="300"></MudImage>
             </MudStack>
-            <MudStack Row="true">
-                <MudText Typo="Typo.body2"><b>도수</b></MudText>
-                <MudText Typo="Typo.body2" >@ViewModel.Selected.alcohol_degree%</MudText>
-            </MudStack>
-            <MudStack Row="true">
-                <MudText Typo="Typo.body2"><b>제조사</b></MudText>
-                <MudText Typo="Typo.body2">@ViewModel.Selected.maker </MudText>
-            </MudStack>
-            <MudText Typo="Typo.body2"><b>설명</b></MudText>
-            <MudText Typo="Typo.body2" >@ViewModel.Selected.details</MudText>
-        </MudCardContent>
-    </MudCard>
-    <MudCard Style="margin:20px; margin-bottom:100px">
-        <MudCardContent>
-            <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
-                <MudText Typo="Typo.body2"> <b>리뷰 (@ViewModel.Selected.review_count)</b>  </MudText>
-                <div style="flex-grow: 1;"></div> 
-                <MudIconButton 
-                    Icon="@Icons.Material.Filled.ArrowForwardIos" 
-                    Size="Size.Small"
-                    OnClick="@ShowMoreReview"
-                    >
-                </MudIconButton>
-            </MudStack>
-            @if(ViewModel.FirstReview != null)
-            {
-                <MudText Typo="Typo.body2"> "@ViewModel.FirstReview.user_nickname" 님이 작성 </MudText>
-                <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
-                <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
-            }else
-            {
-                <MudText Typo="Typo.body2"> 리뷰가 없습니다. </MudText>
-            }
-        </MudCardContent>
-    </MudCard>
-    <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" >
-        <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
+            <MudCardContent>
+                <MudText Typo="Typo.h5">@ViewModel.SelectedWhiskey.whiskey_name</MudText>
+                <MudStack Row="true">
+                    <RatingComponent RatingValue=@ViewModel.SelectedWhiskey.rating></RatingComponent>
+                    <MudText Typo="Typo.body2">
+                        @Double.Round(ViewModel.SelectedWhiskey.rating, 1) 점 / @ViewModel.SelectedWhiskey.review_count 개의 리뷰
+                    </MudText>
+                </MudStack>
+                <MudStack Row="true">
+                    <MudText Typo="Typo.body2"><b>도수</b></MudText>
+                    <MudText Typo="Typo.body2" >@ViewModel.SelectedWhiskey.alcohol_degree%</MudText>
+                </MudStack>
+                <MudStack Row="true">
+                    <MudText Typo="Typo.body2"><b>제조사</b></MudText>
+                    <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.maker </MudText>
+                </MudStack>
+                <MudText Typo="Typo.body2"><b>설명</b></MudText>
+                <MudText Typo="Typo.body2" >@ViewModel.SelectedWhiskey.details</MudText>
+            </MudCardContent>
+        </MudCard>
+        <MudCard Style="margin:20px; margin-bottom:100px">
+            <MudCardContent>
+                <MudStack Row="true" Justify="Justify.FlexStart">
+                    <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                    <MudText Typo="Typo.body2"> <b>리뷰 (@ViewModel.SelectedWhiskey.review_count)</b>  </MudText>
+                    <div style="flex-grow: 1;"></div> 
+                    <MudIconButton 
+                        Icon="@Icons.Material.Filled.ArrowForwardIos" 
+                        Size="Size.Small"
+                        OnClick="@ShowMoreReview"
+                        >
+                    </MudIconButton>
+                </MudStack>
+                @if(ViewModel.FirstReview != null)
+                {
+                    <MudText Typo="Typo.body2"> "@ViewModel.FirstReview.user_nickname" 님이 작성 </MudText>
+                    <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
+                    <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
+                }else
+                {
+                    <MudText Typo="Typo.body2"> 리뷰가 없습니다. </MudText>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudStack>
+</div>
+<MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" >
+    @if(UserState.Token != null)
+    {
+        @if (ViewModel.WishCheck != null)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Inherit" Edge="Edge.End" OnClick="ViewModel.changeWishCheck" />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" OnClick="ViewModel.changeWishCheck" />
+        }
         <MudSpacer />
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddReview"> 리뷰 작성하기</MudButton>
-    </MudAppBar>
+    }
+</MudAppBar>
 
-</MudStack>
-</div>
 @code {
     protected override async Task OnInitializedAsync()
     {
@@ -97,4 +117,14 @@
         NavigationManager.NavigateTo("/newreview");
     }
 
+    private void HandleLoginClicked()
+    {
+        PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo("/login", forceLoad: true);
+    }
+
+    private void HandleLogoutClicked()
+    {
+        UserState.init();
+    }
 }
