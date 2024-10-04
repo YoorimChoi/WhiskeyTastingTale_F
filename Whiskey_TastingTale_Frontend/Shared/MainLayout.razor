@@ -16,9 +16,6 @@
         </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
         <MudSpacer />
-        @{
-            if(State.Token != null)
-            {
                 <MudGrid Justify="Justify.Center" Style="padding: 20px;">
                     <MudItem xs="12" sm="6">
                 <MudTextField @bind-Value="ViewModel.SearchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
@@ -26,7 +23,15 @@
                     </MudItem>
                 </MudGrid>
                 <MudSpacer />
+        @{
+            if(State.Token != null)
+            {
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">login</MudButton>
             }
         }
     </MudAppBar>
@@ -37,6 +42,16 @@
 
 @code {
 
+    private void HandleLoginClicked()
+    {
+        PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo("/login", forceLoad:true);
+    }
+
+    private void HandleLogoutClicked()
+    {
+        State.init();
+    }
 
     private void HandleKeyPress(KeyboardEventArgs args)
     {
