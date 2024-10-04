@@ -1,8 +1,10 @@
 ﻿@page "/search"
 @using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Components
 @inject SearchViewModel ViewModel 
+@inject PageState PageState
 @inject NavigationManager NavigationManager
 
 
@@ -44,6 +46,7 @@
     private async void HandleItemClick(Whiskey product)
     {
         await ViewModel.ClickedItem(product); 
+        PageState.PriviousPage = "/search";
         NavigationManager.NavigateTo("/details"); 
     }
 }

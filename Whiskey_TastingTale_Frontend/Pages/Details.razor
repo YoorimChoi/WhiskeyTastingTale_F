@@ -1,8 +1,10 @@
 ﻿@page "/details"
 @using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Components
 @inject DetailsViewModel ViewModel
+@inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -69,7 +71,7 @@
     }
     private async Task GoBack()
     {
-        await JSRuntime.InvokeVoidAsync("goBack");
+        NavigationManager.NavigateTo(PageState.PriviousPage);
     }
     private string GetFullImageUrl(string imagePath)
     {

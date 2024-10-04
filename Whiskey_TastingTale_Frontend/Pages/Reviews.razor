@@ -75,7 +75,7 @@
 @code {
     private async Task GoBack()
     {
-        await JSRuntime.InvokeVoidAsync("goBack");
+        NavigationManager.NavigateTo("/details");
     }
     private string GetFullImageUrl(string imagePath)
     {
