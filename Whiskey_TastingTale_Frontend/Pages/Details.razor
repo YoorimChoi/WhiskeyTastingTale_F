@@ -56,18 +56,18 @@
             @if(ViewModel.FirstReview != null)
             {
                 <MudText Typo="Typo.body2"> "@ViewModel.FirstReview.user_nickname" 님이 작성 </MudText>
-                    <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
-                    <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
+                <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
+                <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
             }else
             {
                 <MudText Typo="Typo.body2"> 리뷰가 없습니다. </MudText>
             }
-                </MudCardContent>
-            </MudCard>
+        </MudCardContent>
+    </MudCard>
     <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" >
         <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
         <MudSpacer />
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary"> 리뷰 작성하기</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddReview"> 리뷰 작성하기</MudButton>
     </MudAppBar>
 
 </MudStack>
@@ -89,7 +89,12 @@
 
     private void ShowMoreReview()
     {
-        NavigationManager.NavigateTo("/reviews"); 
+        NavigationManager.NavigateTo("/reviews");
+    }
+
+    private void AddReview()
+    {
+        NavigationManager.NavigateTo("/newreview");
     }
 
 }

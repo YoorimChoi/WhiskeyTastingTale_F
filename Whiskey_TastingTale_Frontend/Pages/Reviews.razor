@@ -48,7 +48,7 @@
         @foreach (ReviewUserDTO review in ViewModel.Reviews)
         {
             <MudItem xs="12" sm="12" md="12">
-                <MudCard>
+                    <MudCard>
                     <MudCardContent>
                         <MudStack>
                             <MudStack>
@@ -58,7 +58,6 @@
                                     <MudSpacer></MudSpacer>
                                     <RatingComponent RatingValue=@review.rating></RatingComponent>
                                 </MudStack>
-
                                 <MudText Typo="Typo.body2"> @review.review_text  </MudText>
                             </MudStack>
                         </MudStack>
@@ -67,14 +66,13 @@
             </MudItem>
         }
     }
-    
 </MudGrid>
 </div>
 
 <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
     <MudIconButton Icon="@Icons.Material.Filled.FavoriteBorder" Color="Color.Inherit" Edge="Edge.End" />
     <MudSpacer />
-    <MudButton Variant="Variant.Filled" Color="Color.Secondary"> 리뷰 작성하기</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="AddReview"> 리뷰 작성하기</MudButton>
 </MudAppBar>
 
 
@@ -86,5 +84,10 @@
     private string GetFullImageUrl(string imagePath)
     {
         return "https://localhost:7299/images/" + imagePath;
+    }
+
+    private void AddReview()
+    {
+        NavigationManager.NavigateTo("/newreview");
     }
 }
