@@ -21,8 +21,8 @@
             <MudStack>
                 <MudText Typo="Typo.h5" >@ViewModel.Selected.whiskey_name</MudText>
                 <MudStack Row="true">
-                    <RatingComponent RatingValue=3.5></RatingComponent>
-                    <MudText Typo="Typo.body2" > 3.4 / 5개의 리뷰 </MudText>
+                    <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
+                    <MudText Typo="Typo.body2"> @Double.Round(ViewModel.Selected.rating,1) 점 / @ViewModel.Selected.review_count 개의 리뷰 </MudText>
                 </MudStack>
                 <MudStack Row="true">
                     <MudText Typo="Typo.body2"><b>도수</b></MudText>
@@ -52,7 +52,7 @@
                                     <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
                                     <MudText Typo="Typo.overline"> @review.updated_date </MudText>
                                     <MudSpacer></MudSpacer>
-                                    <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
+                                    <RatingComponent RatingValue=@review.rating></RatingComponent>
                                 </MudStack>
 
                                 <MudText Typo="Typo.body2"> @review.review_text  </MudText>

@@ -20,7 +20,9 @@
             <MudText Typo="Typo.h5">@ViewModel.Selected.whiskey_name</MudText>
             <MudStack Row="true">
                 <RatingComponent RatingValue=@ViewModel.Selected.rating></RatingComponent>
-                <MudText Typo="Typo.body2"> 3.4 / 5개의 리뷰 </MudText>
+                <MudText Typo="Typo.body2">
+                    @Double.Round(ViewModel.Selected.rating, 1) 점 / @ViewModel.Selected.review_count 개의 리뷰
+                </MudText>
             </MudStack>
             <MudStack Row="true">
                 <MudText Typo="Typo.body2"><b>도수</b></MudText>
@@ -38,7 +40,7 @@
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
                 <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
-                <MudText Typo="Typo.body2"> <b>리뷰 (5)</b>  </MudText>
+                <MudText Typo="Typo.body2"> <b>리뷰 (@ViewModel.Selected.review_count)</b>  </MudText>
                 <div style="flex-grow: 1;"></div> 
                 <MudIconButton 
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
@@ -48,7 +50,7 @@
             </MudStack>
             <MudCard>
                 <MudCardContent>
-                    <MudText Typo="Typo.body2" > @ViewModel.FirstReview.user_id </MudText>
+                <MudText Typo="Typo.body2"> "@ViewModel.FirstReview.user_nickname" 님이 작성 </MudText>
                     <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
                     <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
                 </MudCardContent>

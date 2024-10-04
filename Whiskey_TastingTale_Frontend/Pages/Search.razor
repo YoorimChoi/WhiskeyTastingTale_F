@@ -22,7 +22,9 @@
                             <MudText Typo="Typo.h5" Class="text-ellipsis">@product.whiskey_name</MudText>
                             <MudStack Row="true">
                                 <RatingComponent RatingValue=product.rating> </RatingComponent>
-                                <MudText> @product.rating 점 / @product.review_count 개 </MudText>
+                            <MudText Class="text-ellipsis">
+                                @Double.Round(product.rating, 1) 점 / @product.review_count 개의 리뷰
+                            </MudText>
                             </MudStack>
                         </MudCardContent>
                     </MudCard>
