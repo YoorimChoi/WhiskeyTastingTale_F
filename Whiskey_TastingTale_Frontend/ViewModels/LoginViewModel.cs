@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Whiskey_TastingTale_Backend.API.DTOs;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
 
@@ -59,9 +60,12 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
             if (response != null)
             {
-                LoginResult token = JsonConvert.DeserializeObject<LoginResult>(response.ToString());
-                _state.Token = token.token; 
-                _state.Email = Email;
+                LoginDTO result = JsonConvert.DeserializeObject<LoginDTO>(response.ToString());
+                _state.Token = result.token; 
+                _state.Email = result.email;
+                _state.UserId = result.user_id;
+                _state.Nickname = result.nickname; 
+                _state.Role = result.role;
                 return true; 
             }
             return false; 

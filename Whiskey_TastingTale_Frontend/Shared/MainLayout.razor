@@ -4,27 +4,34 @@
 
 @inherits LayoutComponentBase
 @inject UserState State 
+@inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
 <MudThemeProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudAvatar Src="images/icon.png" Alt="Description of your image" />
-
+        <MudAvatar>
+            <MudImage Src="images/icon.png"></MudImage>
+        </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
         <MudSpacer />
-        @{
-            if(State.Token != null)
-            {
                 <MudGrid Justify="Justify.Center" Style="padding: 20px;">
                     <MudItem xs="12" sm="6">
-                        <MudTextField @bind-Value="searchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                <MudTextField @bind-Value="ViewModel.SearchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
                                       OnKeyUp="@HandleKeyPress" />
                     </MudItem>
                 </MudGrid>
                 <MudSpacer />
+        @{
+            if(State.Token != null)
+            {
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">login</MudButton>
             }
         }
     </MudAppBar>
@@ -34,15 +41,24 @@
 </MudLayout>
 
 @code {
-    private string searchWord { get; set; } 
+
+    private void HandleLoginClicked()
+    {
+        PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo("/login", forceLoad:true);
+    }
+
+    private void HandleLogoutClicked()
+    {
+        State.init();
+    }
 
     private void HandleKeyPress(KeyboardEventArgs args)
     {
 
         if (args.Key == "Enter")
         {
-            ViewModel.SearchWord = searchWord;
-            NavigationManager.NavigateTo("/search", forceLoad: true);
+            NavigationManager.NavigateTo("/search", forceLoad:true);
         }
     }
 }

@@ -9,8 +9,11 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 builder.Services.AddScoped<LoginViewModel>();
 builder.Services.AddSingleton<SearchViewModel>();
-builder.Services.AddScoped<DetailsViewModel>();
+builder.Services.AddSingleton<DetailsViewModel>();
+
+
 builder.Services.AddSingleton<UserState>();
+builder.Services.AddScoped<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
 
 var app = builder.Build();

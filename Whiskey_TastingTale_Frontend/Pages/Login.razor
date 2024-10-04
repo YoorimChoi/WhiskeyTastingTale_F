@@ -1,6 +1,9 @@
-﻿@using Whiskey_TastingTale_Frontend.ViewModels
+﻿@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
 @inject LoginViewModel ViewModel
+@inject PageState PageState
 @inject NavigationManager NavigationManager
+
 @page "/login"
 
 <MudPaper Class="pa-4" Elevation="3" Style="max-width: 400px; margin: auto; margin-top: 100px;">
@@ -21,19 +24,19 @@
 
         if (form.IsValid)
         {
-            Console.WriteLine($"Username: {ViewModel.Email}");
-            Console.WriteLine($"Password: {ViewModel.Password}");
-            // 로그인 로직을 구현하세요.
             var result = await ViewModel.RequestLogin(); 
             if (result == true)  {
-                NavigationManager.NavigateTo("/home");
+                NavigationManager.NavigateTo(PageState.PriviousPage);
             }
-            
+            else
+            {
+                Console.WriteLine("로그인 실패");
+            }
+
         }
         else
         {
             Console.WriteLine("폼 유효성 검사 실패");
-            // 유효성 검사 실패 처리
         }
     }
 }
