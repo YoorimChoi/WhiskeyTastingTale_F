@@ -53,11 +53,15 @@
                     >
                 </MudIconButton>
             </MudStack>
-            <MudCard>
-                <MudCardContent>
+            @if(ViewModel.FirstReview != null)
+            {
                 <MudText Typo="Typo.body2"> "@ViewModel.FirstReview.user_nickname" 님이 작성 </MudText>
                     <RatingComponent RatingValue=@ViewModel.FirstReview.rating></RatingComponent>
                     <MudText Typo="Typo.body2" Class="text-ellipsis"> @ViewModel.FirstReview.review_text  </MudText>
+            }else
+            {
+                <MudText Typo="Typo.body2"> 리뷰가 없습니다. </MudText>
+            }
                 </MudCardContent>
             </MudCard>
     <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1" >
