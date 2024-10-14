@@ -55,32 +55,34 @@
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-
-    <MudGrid Spacing="1" Style="margin-bottom:100px; max-width:600px">
-        @if (ViewModel.Reviews.Count != 0)
-        {
-            @foreach (ReviewUserDTO review in ViewModel.Reviews)
+    <MudStack>
+        <MudGrid Spacing="1" Style=" max-width:600px">
+            @if (ViewModel.Reviews.Count != 0)
             {
-                <MudItem xs="12" sm="12" md="12">
-                        <MudCard>
-                        <MudCardContent>
-                            <MudStack>
+                @foreach (ReviewUserDTO review in ViewModel.Reviews)
+                {
+                    <MudItem xs="12" sm="12" md="12">
+                            <MudCard>
+                            <MudCardContent>
                                 <MudStack>
-                                    <MudStack Row="true">
-                                        <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
-                                        <MudText Typo="Typo.overline"> @review.updated_date </MudText>
-                                        <MudSpacer></MudSpacer>
-                                        <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                    <MudStack>
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
+                                            <MudText Typo="Typo.overline"> @review.updated_date </MudText>
+                                            <MudSpacer></MudSpacer>
+                                            <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                        </MudStack>
+                                        <MudText Typo="Typo.body2"> @review.review_text  </MudText>
                                     </MudStack>
-                                    <MudText Typo="Typo.body2"> @review.review_text  </MudText>
                                 </MudStack>
-                            </MudStack>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
             }
-        }
-    </MudGrid>
+        </MudGrid>
+        <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+    </MudStack>
 </div>
 
 <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">

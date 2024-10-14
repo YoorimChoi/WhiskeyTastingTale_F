@@ -5,9 +5,16 @@
 @using Whiskey_TastingTale_Frontend.ViewModels
 @inject MyPageViewModel ViewModel
 @inject PageState PageState
+@inject UserState UserState
 @inject NavigationManager NavigationManager
 
-
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+    <MudSpacer></MudSpacer>
+    @{
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+    }
+</MudAppBar>
 <div style="display: flex; justify-content: center; width: 100%;">
     <MudCard Style="margin:20px;min-width:600px; max-width:600px; background-color:lightgrey">
         <MudCardContent>
@@ -19,20 +26,23 @@
                 <MudCardContent>
                     @if (ViewModel.MyWishs.Count != 0)
                     {
-                        <MudGrid Spacing="1" Class="pt-2">
-                            @foreach( var wish in ViewModel.MyWishs)
-                            {
-                                <MudItem xs="12" sm="6" md="4" @onclick="(()=>HandleItemClick(wish))">
-                                    <MudCard style="margin:10px;width:150px; height:270px">
-                                        <MudImage Src=@GetFullImageUrl(wish.img_index)></MudImage>
-                                        <MudSpacer></MudSpacer>
-                                        <MudText Typo="Typo.body2" Class="text-ellipsis">@wish.whiskey_name</MudText>
-                                        <RatingComponent RatingValue=wish.rating></RatingComponent>
-                                        <MudText Typo="Typo.body2">@Double.Round(wish.rating, 1) 점 / @wish.review_count 개 </MudText>
-                                    </MudCard>
-                                </MudItem>
-                            }
-                        </MudGrid>
+                        <MudStack>
+                            <MudGrid Spacing="1" Class="pt-2">
+                                @foreach( var wish in ViewModel.MyWishs)
+                                {
+                                    <MudItem xs="12" sm="6" md="4" @onclick="(()=>HandleItemClick(wish))">
+                                        <MudCard style="margin:10px;width:150px; height:270px">
+                                            <MudImage Src=@GetFullImageUrl(wish.img_index)></MudImage>
+                                            <MudSpacer></MudSpacer>
+                                            <MudText Typo="Typo.body2" Class="text-ellipsis">@wish.whiskey_name</MudText>
+                                            <RatingComponent RatingValue=wish.rating></RatingComponent>
+                                            <MudText Typo="Typo.body2">@Double.Round(wish.rating, 1) 점 / @wish.review_count 개 </MudText>
+                                        </MudCard>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                            <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.WishTotalPage" SelectedChanged="ViewModel.WishPagesChanged" />
+                        </MudStack>
                     }
                     else
                     {
@@ -47,6 +57,17 @@
 
 
 @code {
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/mypage");
+    }
+    private void HandleLogoutClicked()
+    {
+        UserState.init();
+        NavigationManager.NavigateTo("/home", forceLoad: true);
+    }
+
     private string GetFullImageUrl(string imagePath)
     {
         return "https://localhost:7299/images/" + imagePath;

@@ -57,7 +57,88 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 OnPropertyChanged(nameof(MyWishs));
             }
         }
+        private int reviewPage = 1;
+        public int ReviewPage
+        {
+            get
+            {
+                return reviewPage;
+            }
+            set
+            {
+                reviewPage = value;
+                OnPropertyChanged(nameof(ReviewPage));
+            }
+        }
 
+        private int reviewTotalPage = 1;
+        public int ReviewTotalPage
+        {
+            get
+            {
+                return reviewTotalPage;
+            }
+            set
+            {
+                reviewTotalPage = value;
+                OnPropertyChanged(nameof(ReviewTotalPage));
+            }
+        }
+
+        private int reviewTotalCount = 1;
+        public int ReviewTotalCount
+        {
+            get
+            {
+                return reviewTotalCount;
+            }
+            set
+            {
+                reviewTotalCount = value;
+                OnPropertyChanged(nameof(ReviewTotalCount));
+            }
+        }
+        private int wishPage = 1;
+        public int WishPage
+        {
+            get
+            {
+                return wishPage;
+            }
+            set
+            {
+                wishPage = value;
+                OnPropertyChanged(nameof(WishPage));
+            }
+        }
+
+        private int wishTotalPage = 1;
+        public int WishTotalPage
+        {
+            get
+            {
+                return wishTotalPage;
+            }
+            set
+            {
+                wishTotalPage = value;
+                OnPropertyChanged(nameof(WishTotalPage));
+            }
+        }
+
+        private int wishTotalCount = 1;
+        public int WishTotalCount
+        {
+            get
+            {
+                return wishTotalCount;
+            }
+            set
+            {
+                wishTotalCount = value;
+                OnPropertyChanged(nameof(WishTotalCount));
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -67,17 +148,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-            var reviews_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/user/" + _userState.UserId);
-            if (reviews_result != null)
-            {
-                MyReviews = JsonConvert.DeserializeObject<List<ReviewWhiskeyDTO>>(reviews_result.ToString());
-            }
-
-            var wishs_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Wish/user/" + _userState.UserId);
-            if (wishs_result != null)
-            {
-                MyWishs = JsonConvert.DeserializeObject<List<WishWhiskeyDTO>>(wishs_result.ToString());
-            }
+            await LoadReviewData();
+            await LoadWishData();
         }
 
         public async Task ClickedReviewItem(ReviewWhiskeyDTO review)
@@ -100,6 +172,43 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 _whiskeyState.Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
             }
 
+        }
+
+        public async Task LoadReviewData()
+        {
+            var reviews_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/user/" + _userState.UserId + "?page=" + ReviewPage);
+            if (reviews_result != null)
+            {
+                var result = JsonConvert.DeserializeObject<ReviewWhiskeyPageDTO>(reviews_result.ToString());
+                MyReviews = result.reviews;
+                ReviewTotalCount = result.totalCount;
+                ReviewTotalPage = result.totalPages;
+
+            }
+        }
+
+        public async Task LoadWishData()
+        {
+            var wishs_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Wish/user/" + _userState.UserId + "?page=" + WishPage);
+            if (wishs_result != null)
+            {
+                var result = JsonConvert.DeserializeObject<WishWhiskeyPageDTO>(wishs_result.ToString());
+                MyWishs = result.wishs;
+                WishTotalCount = result.totalCount;
+                WishTotalPage = result.totalPages;
+            }
+        }
+
+        public async Task ReviewPagesChanged(int page)
+        {
+            ReviewPage = page; 
+            await LoadReviewData();
+        }
+
+        public async Task WishPagesChanged(int page)
+        {
+            WishPage = page;
+            await LoadWishData();
         }
     }
 }

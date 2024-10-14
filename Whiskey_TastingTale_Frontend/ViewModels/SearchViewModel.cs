@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+using Whiskey_TastingTale_Backend.API.DTOs;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
 
@@ -15,42 +17,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             _whiskeyState = whiskeyState;
         }
 
-        private string searchWord;
-        private List<Whiskey> searachResult = new List<Whiskey>() {
-            new Whiskey()
-            {
-                whiskey_name = "name",
-                alcohol_degree = 70.3, 
-                img_index = "images/icon.png", 
-                details = "내맘대로적을거임 짜증남 프론트", 
-                maker = "나당나당뀨뀨스키핑"
-            },
-            new Whiskey()
-            {
-                whiskey_name = "name1",
-                alcohol_degree = 70.3,
-                img_index = "images/icon.png",
-                details = "내맘대로적을거임 짜증남 프론트",
-                maker = "나당나당뀨뀨스키핑"
-            },
-            new Whiskey()
-            {
-                whiskey_name = "name2",
-                alcohol_degree = 70.3,
-                img_index = "images/icon.png",
-                details = "내맘대로적을거임 짜증남 프론트",
-                maker = "나당나당뀨뀨스키핑"
-            },
-            new Whiskey()
-            {
-                whiskey_name = "name3",
-                alcohol_degree = 70.3,
-                img_index = "images/icon.png",
-                details = "내맘대로적을거임 짜증남 프론트",
-                maker = "나당나당뀨뀨스키핑"
-            }
-
-        } ;
+        private string searchWord = String.Empty;
+        private List<Whiskey> searachResult = new List<Whiskey>();
         public List<Whiskey> SearchResult {
             get => searachResult; 
             set
@@ -70,6 +38,49 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             }
         }
 
+        private int page = 1; 
+        public int Page
+        {
+            get
+            {
+                return page;
+            }
+            set
+            {
+                page = value;
+                OnPropertyChanged(nameof(Page));
+            }
+        }
+
+        private int totalPage = 1;
+        public int TotalPage
+        {
+            get
+            {
+                return totalPage;
+            }
+            set
+            {
+                totalPage = value;
+                OnPropertyChanged(nameof(TotalPage));
+            }
+        }
+
+        private int totalCount = 1;
+        public int TotalCount
+        {
+            get
+            {
+                return totalCount;
+            }
+            set
+            {
+                totalCount = value;
+                OnPropertyChanged(nameof(TotalCount));
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -79,14 +90,22 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-
-            var response = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/name/"+SearchWord);
-               
-
-            if (response != null)
+            string url = RestApiHelper.server_uri + "Whiskey/name/"+ SearchWord + "?page=" + Page; 
+            var response = await RestApiHelper.Get(url);
+            
+            var result = JsonConvert.DeserializeObject<WhiskeyPageDTO>(response.ToString());
+            if (result.page != 0)
             {
-                SearchResult = JsonConvert.DeserializeObject<List<Whiskey>>(response.ToString());
+                SearchResult = result.whiskeys;
+                TotalPage = result.totalPages;
+                TotalCount = result.totalCount;
             }
+        }
+
+        public async Task PageChanged(int i)
+        {
+            Page = i; 
+            await LoadData(); 
         }
 
         public async Task ClickedItem(Whiskey product)

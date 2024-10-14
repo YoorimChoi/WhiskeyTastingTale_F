@@ -5,7 +5,18 @@
 @using Whiskey_TastingTale_Frontend.ViewModels
 @inject MyPageViewModel ViewModel
 @inject PageState PageState
+@inject UserState UserState
 @inject NavigationManager NavigationManager
+
+
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+    <MudSpacer></MudSpacer>
+    @{
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+    }
+</MudAppBar>
 
 <div style="display: flex; justify-content: center; width: 100%;">
     <MudCard Style="margin:20px; min-width:600px; max-width:600px;">
@@ -21,31 +32,45 @@
 <div style="display: flex; justify-content: center; width: 100%;">
     @if (ViewModel.MyReviews.Count != 0)
     {
-        <MudGrid Spacing="1" Style="margin-bottom:100px; max-width:600px">
-            @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
-            {
-                <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
-                    <MudCard Style="margin-top:10px" >
-                        <MudStack Row="true" Style="margin:20px;margin-right:0px;">
-                            <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
-                            <MudStack>
-                                <MudSpacer></MudSpacer>
-                                <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
-                                <RatingComponent RatingValue=@review.rating></RatingComponent>
-                                <MudText Class="text-ellipsis"> @review.review_text  </MudText>
-                                <MudText Typo="Typo.body2" Align="Align.End"> @review.updated_date </MudText>
-                            </MudStack> 
-                        </MudStack>
-                    </MudCard>
-                </MudItem>
-            }
-        </MudGrid>
+        <MudStack>
+            <MudGrid Spacing="1" Style="max-width:600px">
+                @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
+                {
+                    <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
+                        <MudCard Style="margin-top:10px" >
+                            <MudStack Row="true" Style="margin:20px;margin-right:0px;">
+                                <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
+                                <MudStack>
+                                    <MudSpacer></MudSpacer>
+                                    <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
+                                    <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                    <MudText Class="text-ellipsis"> @review.review_text  </MudText>
+                                    <MudText Typo="Typo.body2" Align="Align.End"> @review.updated_date </MudText>
+                                </MudStack> 
+                            </MudStack>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+            <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+        </MudStack>
     }
 </div>
 
 
 
 @code {
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/mypage");
+    }
+    private void HandleLogoutClicked()
+    {
+        UserState.init();
+        NavigationManager.NavigateTo("/home", forceLoad: true);
+    }
+
     private string GetFullImageUrl(string imagePath)
     {
         return "https://localhost:7299/images/" + imagePath;
