@@ -18,7 +18,7 @@
     @{
         if (UserState.Token != null)
         {
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+            <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">MyPage</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
         }
         else
@@ -113,6 +113,10 @@
     private void AddReview()
     {
         NavigationManager.NavigateTo("/newreview");
+    }
+    private void HandleMyPageClicked()
+    {
+        NavigationManager.NavigateTo("/mypage", forceLoad: true);
     }
 
     private void HandleLoginClicked()

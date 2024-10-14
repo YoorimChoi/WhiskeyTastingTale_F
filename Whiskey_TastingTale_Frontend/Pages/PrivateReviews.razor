@@ -1,0 +1,60 @@
+﻿@page "/private_reviews"
+@using Whiskey_TastingTale_Backend.API.DTOs
+@using Whiskey_TastingTale_Frontend.Components
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@inject MyPageViewModel ViewModel
+@inject PageState PageState
+@inject NavigationManager NavigationManager
+
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px; min-width:600px; max-width:600px;">
+        <MudCardContent>
+            <MudStack Row="true" Justify="Justify.FlexStart">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+<div style="display: flex; justify-content: center; width: 100%;">
+    @if (ViewModel.MyReviews.Count != 0)
+    {
+        <MudGrid Spacing="1" Style="margin-bottom:100px; max-width:600px">
+            @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
+            {
+                <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
+                    <MudCard Style="margin-top:10px" >
+                        <MudStack Row="true" Style="margin:20px;margin-right:0px;">
+                            <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
+                            <MudStack>
+                                <MudSpacer></MudSpacer>
+                                <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
+                                <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                <MudText Class="text-ellipsis"> @review.review_text  </MudText>
+                                <MudText Typo="Typo.body2" Align="Align.End"> @review.updated_date </MudText>
+                            </MudStack> 
+                        </MudStack>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+</div>
+
+
+
+@code {
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+
+    private async void HandleItemClick(ReviewWhiskeyDTO review)
+    {
+        await ViewModel.ClickedReviewItem(review);
+        PageState.PriviousPage = "/private_reviews";
+        NavigationManager.NavigateTo("/details");
+    }
+}

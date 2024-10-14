@@ -1,0 +1,61 @@
+﻿@page "/private_wishs"
+@using Whiskey_TastingTale_Backend.API.DTOs
+@using Whiskey_TastingTale_Frontend.Components
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@inject MyPageViewModel ViewModel
+@inject PageState PageState
+@inject NavigationManager NavigationManager
+
+
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px;min-width:600px; max-width:600px; background-color:lightgrey">
+        <MudCardContent>
+            <MudStack Row="true" Justify="Justify.FlexStart">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>내 위시리스트</b>  </MudText>
+            </MudStack>
+            <MudCard Style=" margin-top:10px;background-color:white">
+                <MudCardContent>
+                    @if (ViewModel.MyWishs.Count != 0)
+                    {
+                        <MudGrid Spacing="1" Class="pt-2">
+                            @foreach( var wish in ViewModel.MyWishs)
+                            {
+                                <MudItem xs="12" sm="6" md="4" @onclick="(()=>HandleItemClick(wish))">
+                                    <MudCard style="margin:10px;width:150px; height:270px">
+                                        <MudImage Src=@GetFullImageUrl(wish.img_index)></MudImage>
+                                        <MudSpacer></MudSpacer>
+                                        <MudText Typo="Typo.body2" Class="text-ellipsis">@wish.whiskey_name</MudText>
+                                        <RatingComponent RatingValue=wish.rating></RatingComponent>
+                                        <MudText Typo="Typo.body2">@Double.Round(wish.rating, 1) 점 / @wish.review_count 개 </MudText>
+                                    </MudCard>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.body2"> 위시리스트가 없습니다. </MudText>
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+
+
+@code {
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+
+    private async void HandleItemClick(WishWhiskeyDTO wish)
+    {
+        await ViewModel.ClickedWishItem(wish);
+        PageState.PriviousPage = "/private_wishs";
+        NavigationManager.NavigateTo("/details");
+    }
+}
