@@ -11,6 +11,7 @@ builder.Services.AddScoped<LoginViewModel>();
 builder.Services.AddSingleton<SearchViewModel>();
 builder.Services.AddSingleton<DetailsViewModel>();
 builder.Services.AddSingleton<MyPageViewModel>();
+builder.Services.AddSingleton<RegisterViewModel>();
 
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<PageState>();

@@ -1,53 +1,60 @@
-﻿@* @using System.Text.Json
+﻿@using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
-
 @inject RegisterViewModel ViewModel
-@inject EventConsole console 
+@inject PageState PageState
+@inject NavigationManager NavigationManager
 
-<RadzenCard class="rz-my-12 rz-mx-auto rz-p-4 rz-p-md-12" style="max-width: 600px;">
-    <RadzenTemplateForm TItem="RegisterViewModel" Data=@ViewModel Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-            <RadzenStack Gap="1rem" class="rz-p-sm-12">
-                <RadzenFormField Text="First Name" Variant="@variant">
-                    <ChildContent>
-                        <RadzenTextBox Name="Email" @bind-Value=@ViewModel.Email/>
-                    </ChildContent>
-                    <Helper>
-                        <RadzenRequiredValidator Component="Email" Text="Email is required." />
-                    </Helper>
-                </RadzenFormField>
-                <RadzenFormField Text="Password" Variant="@variant">
-                    <ChildContent>
-                    <RadzenTextBox Name="Password" @bind-Value=@ViewModel.Password />
-                    </ChildContent>
-                    <Helper>
-                        <RadzenRequiredValidator Component="Password" Text="Password is required." />
-                    </Helper>
-                </RadzenFormField>
-                <RadzenFormField Text="Nickname" Variant="@variant">
-                    <ChildContent>
-                    <RadzenTextBox Name="Nickname" @bind-Value=@ViewModel.Nickname />
-                    </ChildContent>
-                    <Helper>
-                        <RadzenRequiredValidator Component="Nickname" Text="Nickname is required." />
-                    </Helper>
-                </RadzenFormField>
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
-            </RadzenStack>
-    </RadzenTemplateForm>
-</RadzenCard> 
+@page "/register"
 
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 400px; margin: auto; margin-top: 100px;">
+    <MudText Typo="Typo.h5" GutterBottom="true">회원가입</MudText>
+    <MudForm>
+        <MudStack Row="true" >
+            <MudTextField T="string" Label="이메일" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Email" FullWidth="true" />
+            <MudStack Spacing="0">
+                <MudButton 
+                    Style="white-space: nowrap;height: 30px; margin-top:10px;" 
+                    Size="Size.Small" 
+                    Color="Color.Secondary" 
+                    Variant="Variant.Outlined"
+                    OnClick="@ViewModel.CheckDuplicationEmail">중복 체크</MudButton>
+                <MudText Align="Align.End" Typo="Typo.overline">@ViewModel.EmailDuplicationCheck</MudText>
+            </MudStack>
+        </MudStack>
+        <MudStack Row="true">
+            <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Password" InputType="InputType.Password" FullWidth="true" />
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+        </MudStack>
+        <MudStack Row="true">
+            <MudTextField T="string" Label="닉네임" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Nickname" FullWidth="true" />
+            <MudStack Spacing="0">
+                <MudButton 
+                    Style="white-space: nowrap;height: 30px; margin-top:10px;" 
+                    Size="Size.Small" 
+                    Color="Color.Secondary" 
+                    Variant="Variant.Outlined"
+                    OnClick="@ViewModel.CheckDuplicationNickname">중복체크</MudButton>
+                <MudText Align="Align.End" Typo="Typo.overline"> @ViewModel.NicknameDuplicationCheck </MudText>
+            </MudStack>
+        </MudStack>
+        <MudButton  Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="HandleRegister" Class="mt-4">회원가입</MudButton>
+        <MudText Align="Align.Center" Typo="Typo.overline"> @ViewModel.RegisterCheck </MudText>
+    </MudForm>
+</MudPaper>
 
 @code {
-    Variant variant = Variant.Outlined;
-
-    void OnSubmit(RegisterViewModel model)
+    private async Task HandleRegister()
     {
-        console.Log($"Submit: {JsonSerializer.Serialize(model, new JsonSerializerOptions() { WriteIndented = true })}");
+        var result = await ViewModel.HandleRegister();
+        if (result == true) {
+            NavigationManager.NavigateTo("/home");
+        }
     }
 
-    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
-    {
-        console.Log($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
-    }
 }
- *@
