@@ -22,6 +22,10 @@ builder.Services.AddSingleton<RestApiHelper>();
 
 
 
+
+
+
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
