@@ -18,7 +18,13 @@ namespace Whiskey_TastingTale_Frontend.Services
                 priviousPages.Push(value);
             }
         }
+
+        public void init()
+        {
+            priviousPages.Clear(); 
+        }
     }
+
 
 
        

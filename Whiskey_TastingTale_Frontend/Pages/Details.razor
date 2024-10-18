@@ -15,7 +15,7 @@
     @{
         if (UserState.Token != null)
         {
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+            <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">MyPage</MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
         }
         else
@@ -26,7 +26,7 @@
 </MudAppBar>
 <div style="display: flex; justify-content: center; width: 100%;">
     <MudStack > 
-        <MudCard Style="margin:20px;max-width:600px;">
+        <MudCard Style="margin:20px;min-width:600px;max-width:600px;">
             <MudStack AlignItems="AlignItems.Center">
                 <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) ObjectFit="ObjectFit.Contain" Height="300"></MudImage>
             </MudStack>
@@ -106,7 +106,10 @@
     {
         return "https://localhost:7299/images/" + imagePath;
     }
-
+    private void HandleMyPageClicked()
+    {
+        NavigationManager.NavigateTo("/mypage", forceLoad: true);
+    }
     private void ShowMoreReview()
     {
         NavigationManager.NavigateTo("/reviews");

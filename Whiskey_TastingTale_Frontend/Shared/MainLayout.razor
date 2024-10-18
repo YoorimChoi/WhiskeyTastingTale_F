@@ -7,26 +7,19 @@
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
-<MudThemeProvider />
+<MudThemeProvider  />
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudAvatar>
+        <MudAvatar Square="true" @onclick="HandleHpmeClicked">
             <MudImage Src="images/icon.png"></MudImage>
         </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
-        <MudSpacer />
-                <MudGrid Justify="Justify.Center" Style="padding: 20px;">
-                    <MudItem xs="12" sm="6">
-                <MudTextField @bind-Value="ViewModel.SearchWord" Placeholder="Search..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
-                                      OnKeyUp="@HandleKeyPress" />
-                    </MudItem>
-                </MudGrid>
-                <MudSpacer />
+        <MudTextField @bind-Value="ViewModel.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
         @{
             if(State.Token != null)
             {
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary">MyPage</MudButton>
+                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">MyPage</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
             }
             else
@@ -51,6 +44,19 @@
     private void HandleLogoutClicked()
     {
         State.init();
+        if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("mypage")){
+            NavigationManager.NavigateTo("/home", forceLoad: true);
+
+        }
+    }
+    private void HandleMyPageClicked()
+    {
+        NavigationManager.NavigateTo("/mypage", forceLoad: true);
+    }
+    private void HandleHpmeClicked()
+    {
+        PageState.init();  
+        NavigationManager.NavigateTo("/home", forceLoad: true);
     }
 
     private void HandleKeyPress(KeyboardEventArgs args)
