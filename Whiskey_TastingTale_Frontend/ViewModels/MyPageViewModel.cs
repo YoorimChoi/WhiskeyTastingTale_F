@@ -14,14 +14,16 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
     {
         private readonly UserState _userState;
         private readonly WhiskeyState _whiskeyState;
+        private readonly RestApiHelper _apiHelper; 
 
         private List<ReviewWhiskeyDTO> myReviews = new List<ReviewWhiskeyDTO>(); 
         private List<WishWhiskeyDTO> myWishs = new List<WishWhiskeyDTO>();
 
-        public MyPageViewModel(UserState userSate, WhiskeyState whiskeyState)
+        public MyPageViewModel(UserState userSate, WhiskeyState whiskeyState, RestApiHelper apiHelper)
         {
             _userState = userSate;
             _whiskeyState = whiskeyState;
+            _apiHelper = apiHelper;
         }
 
         public List<ReviewWhiskeyDTO> MyReviews
@@ -155,7 +157,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task ClickedReviewItem(ReviewWhiskeyDTO review)
         {
             _whiskeyState.Selected = null;
-            var whiskey_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/" + review.whiskey_id);
+            var whiskey_result = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + review.whiskey_id);
             if (whiskey_result != null)
             {
                 _whiskeyState.Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
@@ -166,7 +168,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task ClickedWishItem(WishWhiskeyDTO wish)
         {
             _whiskeyState.Selected = null;
-            var whiskey_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/" + wish.whiskey_id);
+            var whiskey_result = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + wish.whiskey_id);
             if (whiskey_result != null)
             {
                 _whiskeyState.Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
@@ -176,8 +178,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadReviewData()
         {
-            var reviews_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/user/" + _userState.UserId + "?page=" + ReviewPage);
-            if (reviews_result != null)
+            var reviews_result = await _apiHelper.Get(_apiHelper.server_uri + "Review/user?page=" + ReviewPage);
+            if (!string.IsNullOrEmpty(reviews_result.ToString()))
             {
                 var result = JsonConvert.DeserializeObject<ReviewWhiskeyPageDTO>(reviews_result.ToString());
                 MyReviews = result.reviews;
@@ -189,8 +191,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadWishData()
         {
-            var wishs_result = await RestApiHelper.Get(RestApiHelper.server_uri + "Wish/user/" + _userState.UserId + "?page=" + WishPage);
-            if (wishs_result != null)
+            var wishs_result = await _apiHelper.Get(_apiHelper.server_uri + "Wish/user?page=" + WishPage);
+            if (!string.IsNullOrEmpty(wishs_result.ToString()))
             {
                 var result = JsonConvert.DeserializeObject<WishWhiskeyPageDTO>(wishs_result.ToString());
                 MyWishs = result.wishs;
@@ -209,6 +211,18 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             WishPage = page;
             await LoadWishData();
+        }
+
+        public async Task<bool> ClickedDeleteReview(ReviewWhiskeyDTO review)
+        { 
+            var response = await _apiHelper.Delete(_apiHelper.server_uri + "Review/" + review.review_id);
+            var result = JsonConvert.DeserializeObject<Review>(response.ToString());
+            if (review.review_id == result.review_id)
+            {
+                await LoadReviewData();
+                return true;
+            }
+            else return false;
         }
     }
 }

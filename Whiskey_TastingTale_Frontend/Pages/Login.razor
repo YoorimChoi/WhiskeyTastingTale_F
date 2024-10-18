@@ -11,7 +11,9 @@
     <MudForm @ref="form">
         <MudTextField T="string" Label="사용자 이름" Variant="Variant.Outlined" @bind-Value="ViewModel.Email" Required="true" FullWidth="true" />
         <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" @bind-Value="ViewModel.Password" InputType="InputType.Password" Required="true" FullWidth="true" />
+        <MudText Align="Align.Center" Typo="Typo.overline"> @ViewModel.LoginResult </MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="HandleLogin" Class="mt-4">로그인</MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" FullWidth="true" OnClick="ClickedRegister" Class="mt-4">회원가입</MudButton>
     </MudForm>
 </MudPaper>
 
@@ -28,15 +30,11 @@
             if (result == true)  {
                 NavigationManager.NavigateTo(PageState.PriviousPage);
             }
-            else
-            {
-                Console.WriteLine("로그인 실패");
-            }
+        }
+    }
 
-        }
-        else
-        {
-            Console.WriteLine("폼 유효성 검사 실패");
-        }
+    private async Task ClickedRegister()
+    {
+        NavigationManager.NavigateTo("/register");
     }
 }

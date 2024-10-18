@@ -7,7 +7,9 @@
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
-<MudThemeProvider  />
+<MudThemeProvider />
+<MudDialogProvider />
+<MudPopoverProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1">
@@ -38,33 +40,33 @@
     private void HandleLoginClicked()
     {
         PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.NavigateTo("/login", forceLoad:true);
+        NavigationManager.NavigateTo("/login" );
     }
 
     private void HandleLogoutClicked()
     {
         State.init();
         if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("mypage")){
-            NavigationManager.NavigateTo("/home", forceLoad: true);
+            NavigationManager.NavigateTo("/home" );
 
         }
     }
     private void HandleMyPageClicked()
     {
-        NavigationManager.NavigateTo("/mypage", forceLoad: true);
+        NavigationManager.NavigateTo("/mypage" );
     }
     private void HandleHpmeClicked()
     {
         PageState.init();  
-        NavigationManager.NavigateTo("/home", forceLoad: true);
+        NavigationManager.NavigateTo("/home" );
     }
 
     private void HandleKeyPress(KeyboardEventArgs args)
     {
 
-        if (args.Key == "Enter")
+        if (args.Key == "Enter" && ViewModel.SearchWord != String.Empty)
         {
-            NavigationManager.NavigateTo("/search", forceLoad:true);
+            NavigationManager.NavigateTo("/search", forceLoad:true );
         }
     }
 }

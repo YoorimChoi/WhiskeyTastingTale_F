@@ -11,10 +11,22 @@ builder.Services.AddScoped<LoginViewModel>();
 builder.Services.AddSingleton<SearchViewModel>();
 builder.Services.AddSingleton<DetailsViewModel>();
 builder.Services.AddSingleton<MyPageViewModel>();
+builder.Services.AddSingleton<RegisterViewModel>();
+builder.Services.AddSingleton<AddWhiskeyViewModel>();
+builder.Services.AddSingleton<RequestListViewModel>();
 
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
+builder.Services.AddSingleton<RestApiHelper>();
+
+builder.Services.AddServerSideBlazor()
+    .AddCircuitOptions(options =>
+    {
+        options.DisconnectedCircuitMaxRetained = 100;
+        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
+    });
+
 
 var app = builder.Build();
 
