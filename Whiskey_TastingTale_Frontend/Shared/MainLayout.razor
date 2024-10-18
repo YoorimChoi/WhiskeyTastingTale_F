@@ -62,7 +62,7 @@
     private void HandleKeyPress(KeyboardEventArgs args)
     {
 
-        if (args.Key == "Enter")
+        if (args.Key == "Enter" && ViewModel.SearchWord != String.Empty)
         {
             NavigationManager.NavigateTo("/search", forceLoad:true);
         }
