@@ -20,6 +20,12 @@ builder.Services.AddSingleton<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
 builder.Services.AddSingleton<RestApiHelper>();
 
+builder.Services.AddServerSideBlazor()
+    .AddCircuitOptions(options =>
+    {
+        options.DisconnectedCircuitMaxRetained = 100;
+        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
+    });
 
 
 var app = builder.Build();
