@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@inject AddWhiskeyViewModel ViewModel
+@inject PageState PageState
+@inject NavigationManager NavigationManager
+
+@page "/add_whiskey"
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+</MudAppBar>
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;" >
+    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+        <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+    </MudStack>
+    <MudText Style="margin-top:20px" Typo="Typo.subtitle1"> <b>이미지 업로드 </b> </MudText>
+    <MudImage Src="@ViewModel.UploadedImage" Style="width: 570px; height: 350px; " ObjectFit="ObjectFit.ScaleDown"></MudImage>
+    <div style="justify-content:end;display:flex;">
+    <MudText Typo="Typo.caption"> @ViewModel.UploadResult</MudText>
+    </div>
+    <InputFile OnChange="@ViewModel.HandleFileSelected" accept="image/*" style="justify-self:flex-end; "/>
+    <MudForm Style = "margin-top:20px;" @ref="form">
+        <MudTextField T="string" Label="위스키 이름" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Name" FullWidth="true" />
+        <MudTextField  Label="도수" Variant="Variant.Outlined" @bind-Value="ViewModel.AlcoholDegree" FullWidth="true" HelperText="숫자를 입력하십시오." Format="F1" />
+        <MudTextField T="string" Label="제조사" Variant="Variant.Outlined"  @bind-Value="ViewModel.Maker" FullWidth="true" />
+        <MudTextField T="string" Label="설명" Lines="5" Variant="Variant.Outlined" @bind-Value="ViewModel.Details" FullWidth="true" />
+        <MudButton  Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="HandleRegister" Class="mt-4">등록 요청</MudButton>
+    </MudForm>
+    <MudText Align="Align.Center" Typo="Typo.overline"> @ViewModel.RegisterResult </MudText>
+</MudPaper>
+
+@code {
+    private MudForm form;
+
+    
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/request_list");
+    }
+
+    private async void HandleRegister()
+    {
+        var result = await ViewModel.HandleRegister(); 
+        if (result == true) NavigationManager.NavigateTo("/request_list");
+    }
+}

@@ -1,0 +1,129 @@
+﻿@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Frontend.Components
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+
+@inject RequestListViewModel ViewModel
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject PageState PageState
+
+@page "/request_list"
+
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+</MudAppBar>
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;">
+    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+        <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+    </MudStack>
+    <MudDataGrid Style="margin:20px;margin-bottom:0px;" Items="@ViewModel.RequestList">
+        <Columns>
+            <PropertyColumn Property="x => x.name" Title="위스키 이름" />
+            <TemplateColumn Title ="결과">
+                <CellTemplate>
+                    <MudStack Row  >
+                        @if (context.Item.is_accepted == true)
+                        {
+                            <MudText Typo="Typo.body2">승낙</MudText>
+                        }
+                        else if (context.Item.is_completed == false)
+                        {
+                            <MudText Typo="Typo.body2">심사중</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.body2">거절</MudText>
+                        }
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn >
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" FullWidth="true" Variant="Variant.Outlined" OnClick="@(()=> HandleShowDetail(context.Item))">세부 정보</MudButton> 
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudStack Row Justify="Justify.Center">
+                        @if (context.Item.is_accepted == true)
+                        {
+                            <MudButton Size="@Size.Small" FullWidth="true" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(()=> HandleMoveWhiskeyInfo(context.Item))">이동</MudButton>
+                        }
+                        else if (context.Item.is_completed == false)
+                        {
+                            <MudButton Size="@Size.Small" FullWidth="true"  Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(()=> HandleDeleteRequest(context.Item))">요청 취소</MudButton>
+                        }
+                        else
+                        {
+                            <MudText>-</MudText>
+                        }
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+    <div style="display:flex; justify-content:end;margin:20px;margin-bottom:10px">
+        <MudText Typo="Typo.caption"> @ViewModel.DeleteResult </MudText>
+        <MudButton Size="@Size.Small" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAddWhiskey">위스키 추가 요청</MudButton>
+    </div>
+</MudPaper>
+
+@code{
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/mypage");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+
+    private void HandleAddWhiskey()
+    {
+        NavigationManager.NavigateTo("/add_whiskey");
+    }
+
+    private async Task HandleShowDetail(WhiskeyRequest request)
+    {
+        var parameters = new DialogParameters<DetailDialog>
+        {
+            { x => x.Request, request},
+            { x => x.RequestChanged, ViewModel.RequestChanged },
+            { x => x.isModifyAvailble, !(request.is_completed)}
+        };
+        var dialog = await DialogService.ShowAsync<DetailDialog>("요청 세부 정보", parameters);
+        var result = await dialog.Result;
+    }
+
+    private async Task HandleDeleteRequest(WhiskeyRequest request)
+    {
+
+        var parameters = new DialogParameters<DeleteDialog>
+        {
+            { x => x.ContentText, "정말로 요청을 취소하시겠습니까?" },
+            { x => x.ButtonText, "확인" },
+            { x => x.Color, Color.Error }
+        };
+        var dialog = await DialogService.ShowAsync<DeleteDialog>("요청 취소", parameters);
+        var dialogResult = await dialog.Result;
+
+        if (!dialogResult.Canceled)
+        {
+            var result = await ViewModel.HandleDeleteRequest(request);
+            if (result) StateHasChanged();
+        }
+    }
+
+    private void HandleMoveWhiskeyInfo(WhiskeyRequest request)
+    {
+        ViewModel.HandleMoveWhiskeyInfo(request); 
+        PageState.PriviousPage = "/request_list";
+        NavigationManager.NavigateTo("/details");
+    }
+}

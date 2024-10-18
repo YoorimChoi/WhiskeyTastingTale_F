@@ -22,6 +22,21 @@
 <div style="display: flex; justify-content: center; width: 100%;">
     <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
         <MudCardContent>
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+                <div style="flex-grow: 1;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Size="Size.Small"
+                               OnClick="@ShowWhiskeyAddPage">
+                </MudIconButton>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</div>
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+        <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
                 <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
                 <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
@@ -121,5 +136,10 @@
     private void ShowMoreWishList()
     {
         NavigationManager.NavigateTo("/private_wishs");
+    }
+
+    private void ShowWhiskeyAddPage()
+    {
+        NavigationManager.NavigateTo("/request_list");
     }
 }
