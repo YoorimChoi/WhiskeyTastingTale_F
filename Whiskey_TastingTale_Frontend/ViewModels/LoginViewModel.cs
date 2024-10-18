@@ -14,10 +14,12 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         private string email;
         private string password;
         private readonly UserState _state;
+        private readonly RestApiHelper _apiHelper; 
 
-        public LoginViewModel(UserState state)
+        public LoginViewModel(UserState state, RestApiHelper apiHelper)
         {
             _state = state;
+            _apiHelper = apiHelper;
         }
 
 
@@ -52,6 +54,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             
             var response = await RestApiHelper.Post(RestApiHelper.server_uri + "User/login",
+            var response = await _apiHelper.Post(_apiHelper.server_uri + "User/login",
                 new User()
                 {
                     email = Email,

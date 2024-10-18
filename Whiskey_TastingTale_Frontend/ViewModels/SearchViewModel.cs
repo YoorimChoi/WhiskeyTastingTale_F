@@ -12,9 +12,11 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
     public class SearchViewModel : INotifyPropertyChanged
     {
         private readonly WhiskeyState _whiskeyState; 
-        public SearchViewModel(WhiskeyState whiskeyState)
+        private readonly RestApiHelper _apiHelper; 
+        public SearchViewModel(WhiskeyState whiskeyState, RestApiHelper apiHelper)
         {
             _whiskeyState = whiskeyState;
+            _apiHelper = apiHelper;
         }
 
         private string searchWord = String.Empty;
@@ -90,8 +92,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-            string url = RestApiHelper.server_uri + "Whiskey/name/"+ SearchWord + "?page=" + Page; 
-            var response = await RestApiHelper.Get(url);
+            string url = _apiHelper.server_uri + "Whiskey/name/"+ SearchWord + "?page=" + Page; 
+            var response = await _apiHelper.Get(url);
             
             var result = JsonConvert.DeserializeObject<WhiskeyPageDTO>(response.ToString());
             if (result.page != 0)

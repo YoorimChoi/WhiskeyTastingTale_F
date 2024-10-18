@@ -15,6 +15,9 @@ builder.Services.AddSingleton<MyPageViewModel>();
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
+builder.Services.AddSingleton<RestApiHelper>();
+
+
 
 var app = builder.Build();
 

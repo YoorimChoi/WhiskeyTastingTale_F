@@ -11,11 +11,13 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
     {
         private readonly WhiskeyState _whiskeyState;
         private readonly UserState _userState;
+        private readonly RestApiHelper _apiHelper; 
 
-        public DetailsViewModel(WhiskeyState whiskeyState, UserState userState)
+        public DetailsViewModel(WhiskeyState whiskeyState, UserState userState, RestApiHelper apiHelper)
         {
             _whiskeyState = whiskeyState;
             _userState = userState;
+            _apiHelper = apiHelper;
         }
 
         private Whiskey selectedWhiskey = new Whiskey();
@@ -135,13 +137,13 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task LoadData()
         {
             SelectedWhiskey = _whiskeyState.Selected;
-            var whiskey = await RestApiHelper.Get(RestApiHelper.server_uri + "Whiskey/" + SelectedWhiskey.whiskey_id);
+            var whiskey = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + SelectedWhiskey.whiskey_id);
             if (whiskey != null)
             {
                 SelectedWhiskey = JsonConvert.DeserializeObject<Whiskey>(whiskey.ToString());
             }
 
-            var review = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/whiskey/" + SelectedWhiskey.whiskey_id);
+            var review = await _apiHelper.Get(_apiHelper.server_uri + "Review/whiskey/" + SelectedWhiskey.whiskey_id);
 
             if (review != null)
             {
@@ -152,7 +154,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 TotalCount = result.totalCount;
             }
 
-            var wish_response = await RestApiHelper.Get(RestApiHelper.server_uri + "Wish/" + _userState.UserId + "/" + SelectedWhiskey.whiskey_id);
+            var wish_response = await _apiHelper.Get(_apiHelper.server_uri + "Wish/whiskey/" + SelectedWhiskey.whiskey_id);
 
             if (wish_response != null)
             {
@@ -162,7 +164,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task AddReview()
         {
-            var response = await RestApiHelper.Post(RestApiHelper.server_uri + "Review/", new Review
+            var response = await _apiHelper.Post(_apiHelper.server_uri + "Review/", new Review
             {
                 user_id = _userState.UserId,
                 whiskey_id = SelectedWhiskey.whiskey_id,
@@ -175,7 +177,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             if (WishCheck != null)
             {
-                var response = await RestApiHelper.Delete(RestApiHelper.server_uri + "Wish/" + WishCheck.wish_id);
+                var response = await _apiHelper.Delete(_apiHelper.server_uri + "Wish/" + WishCheck.wish_id);
                 if (JsonConvert.DeserializeObject<Wish>(response.ToString()) != null)
                 {
                     WishCheck = null;
@@ -183,7 +185,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             }
             else
             {
-                var response = await RestApiHelper.Post(RestApiHelper.server_uri + "Wish/", new Wish
+                var response = await _apiHelper.Post(_apiHelper.server_uri + "Wish/", new Wish
                 {
                     user_id = _userState.UserId,
                     whiskey_id = SelectedWhiskey.whiskey_id
@@ -204,7 +206,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadReviewData()
         {
-            var review = await RestApiHelper.Get(RestApiHelper.server_uri + "Review/whiskey/" + SelectedWhiskey.whiskey_id +"?page="+Page);
+            var review = await _apiHelper.Get(_apiHelper.server_uri + "Review/whiskey/" + SelectedWhiskey.whiskey_id +"?page="+Page);
 
             if (review != null)
             {
