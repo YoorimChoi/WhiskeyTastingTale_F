@@ -11,7 +11,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 {
     public class SearchViewModel : INotifyPropertyChanged
     {
-        private readonly WhiskeyState _whiskeyState; 
+        private readonly WhiskeyState _whiskeyState;
         private readonly RestApiHelper _apiHelper; 
         public SearchViewModel(WhiskeyState whiskeyState, RestApiHelper apiHelper)
         {
