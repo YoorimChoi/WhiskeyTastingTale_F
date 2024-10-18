@@ -179,7 +179,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task LoadReviewData()
         {
             var reviews_result = await _apiHelper.Get(_apiHelper.server_uri + "Review/user?page=" + ReviewPage);
-            if (reviews_result != null)
+            if (!string.IsNullOrEmpty(reviews_result.ToString()))
             {
                 var result = JsonConvert.DeserializeObject<ReviewWhiskeyPageDTO>(reviews_result.ToString());
                 MyReviews = result.reviews;
@@ -192,7 +192,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         public async Task LoadWishData()
         {
             var wishs_result = await _apiHelper.Get(_apiHelper.server_uri + "Wish/user?page=" + WishPage);
-            if (wishs_result != null)
+            if (!string.IsNullOrEmpty(wishs_result.ToString()))
             {
                 var result = JsonConvert.DeserializeObject<WishWhiskeyPageDTO>(wishs_result.ToString());
                 MyWishs = result.wishs;
@@ -211,6 +211,18 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             WishPage = page;
             await LoadWishData();
+        }
+
+        public async Task<bool> ClickedDeleteReview(ReviewWhiskeyDTO review)
+        { 
+            var response = await _apiHelper.Delete(_apiHelper.server_uri + "Review/" + review.review_id);
+            var result = JsonConvert.DeserializeObject<Review>(response.ToString());
+            if (review.review_id == result.review_id)
+            {
+                await LoadReviewData();
+                return true;
+            }
+            else return false;
         }
     }
 }
