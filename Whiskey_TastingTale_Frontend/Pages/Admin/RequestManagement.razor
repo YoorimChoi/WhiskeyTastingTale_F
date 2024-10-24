@@ -1,0 +1,106 @@
+﻿
+@page "/request_management"
+
+@using Whiskey_TastingTale_Backend.API.DTOs
+@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Frontend.Components
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+
+@inject RequestManagementViewMdoel ViewModel
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject PageState PageState
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+</MudAppBar>
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;">
+    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+        <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+    </MudStack>
+    <MudDataGrid Style="margin-top:10px" Items="@ViewModel.Requests">
+        <Columns>
+            <PropertyColumn Property="x => x.name" Title="이름" />
+            <PropertyColumn Property="x => x.user_id" Title="요청자" />
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" FullWidth="true" Variant="Variant.Outlined" OnClick="@(()=> HandleShowDetail(context.Item))">세부 정보</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceEvenly">
+                        @if (context.Item.is_completed == true)
+                        {
+                            if(context.Item.is_accepted == true)
+                            {
+                                <MudText Typo="Typo.body2" Style="margin-right:15px; margin-left:20px;">승낙</MudText>
+                                <MudButton Size="@Size.Small" Variant="Variant.Filled" OnClick="@(()=> HandleMoveWhiskeyInfo(context.Item))">이동</MudButton>
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.body2"> 거절 </MudText>
+                            }
+                        }
+                        else
+                        {
+                            <MudButton Size="@Size.Small" Variant="Variant.Filled" OnClick="@(()=> ViewModel.HandleAccept(context.Item))">승낙</MudButton>
+                            <MudButton Size="@Size.Small" Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(()=> ViewModel.HandleDecline(context.Item))">거절</MudButton>
+                        }
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager PageSizeOptions="@(new int[]{3,5,10})" />
+        </PagerContent>
+    </MudDataGrid>
+    <MudText Typo="Typo.caption"> * 세부 정보 창에서 수정한 사항은 승낙 전에 저장되지 않습니다.</MudText>
+</MudPaper>
+
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/adminpage");
+    }
+
+    private async Task HandleShowDetail(WhiskeyRequestUserDTO request)
+    {
+        var originRequest = new WhiskeyRequest()
+            {
+                request_id = request.request_id,
+                alcohol_degree = request.alcohol_degree,
+                name = request.name,
+                details = request.details,
+                img_index = request.img_index,
+                maker = request.maker
+            };
+
+        var parameters = new DialogParameters<RequestDetailDialog>
+        {
+            { x => x.Request, originRequest},
+            { x => x.RequestChanged, null },
+            { x => x.isModifyAvailble, true }
+        };
+        var dialog = await DialogService.ShowAsync<RequestDetailDialog>("요청 세부 정보", parameters);
+        var result = await dialog.Result;
+    }
+
+    private void HandleMoveWhiskeyInfo(WhiskeyRequestUserDTO request)
+    {
+        ViewModel.HandleMoveWhiskeyInfo(request);
+        PageState.PriviousPage = "/request_management";
+        NavigationManager.NavigateTo("/admin_details");
+    }
+}

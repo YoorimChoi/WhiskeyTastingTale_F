@@ -14,6 +14,10 @@ builder.Services.AddSingleton<MyPageViewModel>();
 builder.Services.AddSingleton<RegisterViewModel>();
 builder.Services.AddSingleton<AddWhiskeyViewModel>();
 builder.Services.AddSingleton<RequestListViewModel>();
+builder.Services.AddSingleton<UserManagementViewModel>();
+builder.Services.AddSingleton<RequestManagementViewMdoel>();
+builder.Services.AddSingleton<WhiskeyManagementViewMdoel>();
+builder.Services.AddSingleton<ReviewManagementViewMdoel>(); 
 
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<PageState>();
