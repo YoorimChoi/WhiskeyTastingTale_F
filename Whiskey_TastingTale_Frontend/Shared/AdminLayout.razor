@@ -1,0 +1,65 @@
+﻿@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@using Whiskey_TastingTale_Frontend.Pages
+
+@inherits LayoutComponentBase
+@inject UserState State 
+@inject PageState PageState
+@inject NavigationManager NavigationManager
+@inject SearchViewModel ViewModel
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudAvatar Square="true" @onclick="HandleHpmeClicked">
+            <MudImage Src="images/icon.png"></MudImage>
+        </MudAvatar>
+        <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
+        <MudSpacer></MudSpacer>
+        @{
+            if(State.Token != null)
+            {
+                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAdminPageClicked">관리자 페이지</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">로그인</MudButton>
+            }
+        }
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+
+    private void HandleLoginClicked()
+    {
+        PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo("/login" );
+    }
+
+    private void HandleLogoutClicked()
+    {
+        State.init();
+        if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("adminpage")){
+            NavigationManager.NavigateTo("/home" );
+
+        }
+    }
+    private void HandleAdminPageClicked()
+    {
+        NavigationManager.NavigateTo("/adminpage");
+    }
+    private void HandleHpmeClicked()
+    {
+        PageState.init();  
+        NavigationManager.NavigateTo("/home" );
+    }
+
+}

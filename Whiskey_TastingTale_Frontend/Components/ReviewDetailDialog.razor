@@ -1,0 +1,43 @@
+﻿@using Whiskey_TastingTale_Backend.API.DTOs
+@using Whiskey_TastingTale_Backend.Data.Entities
+
+<MudDialog  >
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.ArrowForwardIos" Class="mr-3 mb-n1" />
+            리뷰 정보
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudStack>
+            <MudCard Style="min-width:500px; max-width:500px;">
+                <MudStack Row="true" Style="margin:20px;margin-right:0px;">
+                    <MudImage Src=@GetFullImageUrl(Review.img_index) Style="width:100px;"></MudImage>
+                    <MudStack>
+                        <MudText Class="text-ellipsis"><b>@Review.whiskey_name</b></MudText>
+                        <RatingComponent RatingValue=@Review.rating></RatingComponent>
+                        <MudText Class="text-ellipsis"> @Review.review_text  </MudText>
+                        <MudText Typo="Typo.body2" Align="Align.End"> @Review.updated_date </MudText>
+                    </MudStack>
+                </MudStack>
+            </MudCard>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Error" OnClick="HandleClose">닫기</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public ReviewUserWhiskeyDTO Review { get; set; } = new ReviewUserWhiskeyDTO();
+
+    private void HandleClose() => MudDialog.Cancel();
+
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+}
