@@ -1,12 +1,42 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿@using Whiskey_TastingTale_Frontend.Services
+
+@inject UserState UserState
+
+<CascadingValue Value="UserState">
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@SelectLayoutBasedOnRole" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingValue>
+
+@code{
+
+    private Type SelectLayoutBasedOnRole
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(UserState.Email))
+            {
+                // 역할에 따라 레이아웃 변경
+                if (UserState.Role.Equals("admin"))
+                {
+                    return typeof(AdminLayout);
+                }
+                else if (UserState.Role.Equals("user"))
+                {
+                    return typeof(MainLayout);
+                }
+            }
+
+            return typeof(MainLayout);
+        }
+    }
+}
+}

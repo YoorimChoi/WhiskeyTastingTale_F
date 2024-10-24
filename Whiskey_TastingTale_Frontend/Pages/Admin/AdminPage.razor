@@ -1,0 +1,91 @@
+﻿@using Whiskey_TastingTale_Frontend.Services
+
+@inject UserState UserState
+@inject NavigationManager NavigationManager
+
+@page "/adminpage"
+
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px; max-width:600px; min-width:600px; background-color:lightgrey">
+        <MudCardContent>
+            <MudStack Row="true">
+                <MudText Style="Margin:7px"> <b>"@UserState.Nickname" 님의 마이페이지</b></MudText>
+                <MudSpacer></MudSpacer>
+                <MudButton OnClick="modifyUserInfo" Style="background-color:white"> 정보 수정 </MudButton>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</div>
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+        <MudCardContent>
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>회원 관리</b>  </MudText>
+                <div style="flex-grow: 1;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Size="Size.Small"
+                               OnClick="@ShowUserMaangementPage">
+                </MudIconButton>
+                
+            </MudStack>
+            <MudDivider DividerType="DividerType.Middle" Class="my-3" />
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>리뷰 관리</b>  </MudText>
+                <div style="flex-grow: 1;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Size="Size.Small"
+                               OnClick="@ShowReviewMaangementPage">
+                </MudIconButton>
+            </MudStack>
+            <MudDivider DividerType="DividerType.Middle" Class="my-3" />
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>위스키 정보 관리</b>  </MudText>
+                <div style="flex-grow: 1;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Size="Size.Small"
+                               OnClick="@ShowWhiskeyMaangementPage">
+                </MudIconButton>
+            </MudStack>
+            <MudDivider DividerType="DividerType.Middle" Class="my-3"  />
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudText Typo="Typo.body2"> <b>위스키 등록 관리</b>  </MudText>
+                <div style="flex-grow: 1;"></div>
+                <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Size="Size.Small"
+                               OnClick="@ShowWhiskeyRequestMaangementPage">
+                </MudIconButton>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+@code {
+    private void modifyUserInfo()
+    {
+        NavigationManager.NavigateTo("/private_info");
+    }
+
+    private void ShowWhiskeyRequestMaangementPage()
+    {
+        NavigationManager.NavigateTo("/request_management");
+    }
+
+    private void ShowWhiskeyMaangementPage()
+    {
+        NavigationManager.NavigateTo("/whiskey_management");
+    }
+
+    private void ShowReviewMaangementPage()
+    {
+        NavigationManager.NavigateTo("/review_management");
+    }
+
+    private void ShowUserMaangementPage()
+    {
+        NavigationManager.NavigateTo("/user_management");
+    }
+}

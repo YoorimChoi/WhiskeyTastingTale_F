@@ -1,0 +1,84 @@
+﻿@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Backend.Model
+
+<MudDialog  >
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.ArrowForwardIos" Class="mr-3 mb-n1" />
+            요청 세부 정보 
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudStack>
+            <MudImage Src=@GetFullImageUrl(Info.img_index) Style="width:auto; height: 250px; min-width:450px " ObjectFit="ObjectFit.ScaleDown"></MudImage>
+            @if (isModifyAvailble)
+            {
+                @if (isModify)
+                {
+                    <div style="display:flex; justify-content:end">
+                    <MudText Color="Color.Surface" Typo="Typo.caption">이미지는 수정하지 못합니다. </MudText>
+                    </div>
+                }
+            }
+            <MudTextField T="string" Required="true" Disabled="@(!isModify)" @bind-Value="@Info.whiskey_name" Label="위스키 명" />
+            <MudTextField T="double?" Disabled="@(!isModify)" @bind-Value="@Info.alcohol_degree" Label="알콜 도수" />
+            <MudTextField T="string" Disabled="@(!isModify)" @bind-Value="@Info.maker" Label="제조사" />
+            <MudTextField T="string" Disabled="@(!isModify)" @bind-Value="@Info.details" Label="세부 정보" />
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        @if (isModifyAvailble)
+        {
+            @if (isModify)
+            {
+                <MudButton OnClick="HandleModify">수정 완료</MudButton>
+
+            }
+            else
+            {
+                <MudText>@modifyResult</MudText>
+                <MudButton OnClick="HandleModify">수정</MudButton>
+            }
+        }
+        <MudButton Color="Color.Error" OnClick="HandleClose">닫기</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public Whiskey Info { get; set; } = new Whiskey();
+    [Parameter]
+    public Func<Whiskey, Task<bool>> InfoChanged { get; set; }
+    [Parameter]
+    public bool isModifyAvailble { get; set; }
+
+    private bool isModify = false;
+    private string modifyResult = String.Empty; 
+    private async Task HandleModify()
+    {
+        if (!isModify) isModify = true; 
+        else
+        {
+            if (InfoChanged == null)
+            {
+                isModify = false; 
+                return; 
+            }
+            var response = await InfoChanged(Info);
+            if(response) {
+                isModify = false;
+                modifyResult = string.Empty;
+            }
+            else modifyResult = "수정 실패하였습니다."; 
+        }
+    }
+
+    private void HandleClose() => MudDialog.Cancel();
+
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+}

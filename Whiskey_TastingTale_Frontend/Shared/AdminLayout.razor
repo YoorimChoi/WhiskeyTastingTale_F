@@ -7,6 +7,7 @@
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudPopoverProvider />
@@ -17,11 +18,11 @@
             <MudImage Src="images/icon.png"></MudImage>
         </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
-        <MudTextField @bind-Value="ViewModel.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
+        <MudSpacer></MudSpacer>
         @{
             if(State.Token != null)
             {
-                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">마이 페이지</MudButton>
+                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAdminPageClicked">관리자 페이지</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
             }
             else
@@ -46,14 +47,14 @@
     private void HandleLogoutClicked()
     {
         State.init();
-        if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("mypage")){
+        if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("adminpage")){
             NavigationManager.NavigateTo("/home" );
 
         }
     }
-    private void HandleMyPageClicked()
+    private void HandleAdminPageClicked()
     {
-        NavigationManager.NavigateTo("/mypage" );
+        NavigationManager.NavigateTo("/adminpage");
     }
     private void HandleHpmeClicked()
     {
@@ -61,12 +62,4 @@
         NavigationManager.NavigateTo("/home" );
     }
 
-    private void HandleKeyPress(KeyboardEventArgs args)
-    {
-
-        if (args.Key == "Enter" && ViewModel.SearchWord != String.Empty)
-        {
-            NavigationManager.NavigateTo("/search", forceLoad:true );
-        }
-    }
 }

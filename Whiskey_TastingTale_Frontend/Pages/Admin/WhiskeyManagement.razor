@@ -1,0 +1,88 @@
+﻿@page "/whiskey_management"
+@using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.Components
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+
+@inject WhiskeyManagementViewMdoel ViewModel
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject PageState PageState
+
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+</MudAppBar>
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;">
+    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+        <MudText Typo="Typo.body2"> <b>위스키 관리</b>  </MudText>
+    </MudStack>
+    <MudDataGrid Style="margin-top:10px" Items="@ViewModel.Whiskeys" QuickFilter="@ViewModel.QuickFilterMethod">
+        <ToolBarContent>
+            <MudSpacer></MudSpacer>
+            <MudTextField Placeholder="Search" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                          @bind-Value="ViewModel.SearchString" Immediate="true" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <Columns>
+            <PropertyColumn Property="x => x.whiskey_name" Title="이름" />
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" FullWidth="true" Variant="Variant.Outlined" OnClick="@(()=> HandleShowDetail(context.Item))">세부 정보</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn>
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" Variant="Variant.Filled" OnClick="@(()=> HandleDelete(context.Item))">삭제</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager PageSizeOptions="@(new int[]{5,10,20})" />
+        </PagerContent>
+    </MudDataGrid>
+</MudPaper>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/adminpage");
+    }
+
+    private async Task HandleShowDetail(Whiskey whiskey)
+    {
+        var parameters = new DialogParameters<WhiskeyDetailDialog>
+        {
+            { x => x.Info, whiskey},
+            { x => x.InfoChanged, ViewModel.InfoChanged },
+            { x => x.isModifyAvailble, true }
+        };
+        var dialog = await DialogService.ShowAsync<WhiskeyDetailDialog>("위스키 세부 정보", parameters);
+        var result = await dialog.Result;
+    }
+    private async Task HandleDelete(Whiskey whiskey)
+    {
+        var parameters = new DialogParameters<DeleteDialog>
+        {
+            { x => x.ContentText, "정말로 삭제하시겠습니까?" },
+            { x => x.ButtonText, "확인" },
+            { x => x.Color, Color.Error }
+        };
+        var dialog = await DialogService.ShowAsync<DeleteDialog>("위스키 정보 삭제", parameters);
+        var dialogResult = await dialog.Result;
+
+        if (!dialogResult.Canceled)
+        {
+            var result = await ViewModel.HandleDeleteRequest(whiskey);
+            if (result) StateHasChanged();
+        }
+    }
+}

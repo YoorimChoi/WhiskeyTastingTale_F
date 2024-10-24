@@ -1,0 +1,86 @@
+﻿@page "/admin_reviews"
+@using Whiskey_TastingTale_Backend.API.DTOs
+@using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@using Whiskey_TastingTale_Frontend.Components
+@inject DetailsViewModel ViewModel
+@inject UserState UserState
+@inject PageState PageState
+
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+    <MudSpacer></MudSpacer>
+</MudAppBar>
+
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudCard Style="margin:20px; max-width:600px; min-width:600px">
+        <MudCardContent>
+            <MudStack Row="true" Justify="Justify.Center">
+                <MudStack AlignItems="AlignItems.Center">
+                    <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+                </MudStack>
+                <MudStack >
+                    <MudText Typo="Typo.h5" >@ViewModel.SelectedWhiskey.whiskey_name</MudText>
+                    <MudStack Row="true">
+                        <RatingComponent RatingValue=@ViewModel.SelectedWhiskey.rating></RatingComponent>
+                        <MudText Typo="Typo.body2"> @Double.Round(ViewModel.SelectedWhiskey.rating,1) 점 / @ViewModel.SelectedWhiskey.review_count 개의 리뷰 </MudText>
+                    </MudStack>
+                    <MudStack Row="true">
+                        <MudText Typo="Typo.body2"><b>도수</b></MudText>
+                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.alcohol_degree%</MudText>
+                    </MudStack>
+                    <MudStack Row="true">
+                        <MudText Typo="Typo.body2"><b>제조사</b></MudText>
+                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.maker </MudText>
+                    </MudStack>
+                </MudStack>
+            </MudStack>
+        </MudCardContent>
+    </MudCard>
+</div>
+<div style="display: flex; justify-content: center; width: 100%;">
+    <MudStack>
+        <MudGrid Spacing="1" Style=" max-width:600px">
+            @if (ViewModel.Reviews.Count != 0)
+            {
+                @foreach (ReviewUserDTO review in ViewModel.Reviews)
+                {
+                    <MudItem xs="12" sm="12" md="12">
+                            <MudCard>
+                            <MudCardContent>
+                                <MudStack>
+                                    <MudStack>
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
+                                            <MudText Typo="Typo.overline"> @review.updated_date </MudText>
+                                            <MudSpacer></MudSpacer>
+                                            <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                        </MudStack>
+                                        <MudText Typo="Typo.body2"> @review.review_text  </MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            }
+        </MudGrid>
+        <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+    </MudStack>
+</div>
+
+@code {
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/admin_details");
+    }
+    private string GetFullImageUrl(string imagePath)
+    {
+        return "https://localhost:7299/images/" + imagePath;
+    }
+}

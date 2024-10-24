@@ -4,7 +4,6 @@ using SixLabors.ImageSharp.Processing;
 using System.ComponentModel;
 using Whiskey_TastingTale_Backend.Data.Entities;
 using Whiskey_TastingTale_Frontend.Services;
-using static System.Net.WebRequestMethods;
 
 namespace Whiskey_TastingTale_Frontend.ViewModels
 {

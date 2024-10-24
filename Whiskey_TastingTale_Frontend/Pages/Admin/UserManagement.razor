@@ -1,0 +1,64 @@
+﻿@page "/user_management"
+
+@using Whiskey_TastingTale_Backend.Model
+@using Whiskey_TastingTale_Frontend.ViewModels
+
+@inject UserManagementViewModel ViewModel
+@inject NavigationManager NavigationManager
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
+</MudAppBar>
+
+<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 50px;">
+    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+        <MudText Typo="Typo.body2"> <b>유저 관리</b>  </MudText>
+    </MudStack>
+    <MudDataGrid Style="margin:20px;margin-bottom:0px;" Items="@ViewModel.Users" QuickFilter="@ViewModel.QuickFilterMethod">
+        <ToolBarContent>
+            <MudSpacer> </MudSpacer>
+            <MudSpacer> </MudSpacer>
+            <MudSelect @bind-Value="ViewModel.SearchOption" Style="max-width:100px; min-width:100px;" Required>
+                <MudSelectItem Value="@(new string("전체"))">전체</MudSelectItem>
+                <MudSelectItem Value="@(new string("닉네임"))">닉네임</MudSelectItem>
+                <MudSelectItem Value="@(new string("이메일"))">이메일</MudSelectItem>
+            </MudSelect>
+            <MudTextField Placeholder="Search" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                          @bind-Value="ViewModel.SearchString" Immediate="true" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <Columns>
+            <PropertyColumn Property="x => x.email" Title="이메일" />
+            <PropertyColumn Property="x => x.nickname" Title="닉네임" />
+            <TemplateColumn Title="활성화" >
+                <CellTemplate>
+                    @if (context.Item.is_active == true)
+                    {
+                        <MudButton Size="@Size.Small" FullWidth="true" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(()=> ViewModel.IsActiveChanged(context.Item))">비활성화</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Size="@Size.Small" FullWidth="true" Variant="@Variant.Filled" Color="@Color.Secondary" OnClick="@(()=> ViewModel.IsActiveChanged(context.Item))">활성화</MudButton>
+                    }
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager PageSizeOptions="@(new int[]{5,10,20})"/>
+        </PagerContent>
+    </MudDataGrid>
+</MudPaper>
+
+@code{
+   
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadData();
+        base.OnInitialized();
+    }
+
+    private async Task GoBack()
+    {
+        NavigationManager.NavigateTo("/adminpage");
+    }
+}

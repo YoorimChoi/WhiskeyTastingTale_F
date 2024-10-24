@@ -1,4 +1,5 @@
 ﻿@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Backend.Model
 @using Whiskey_TastingTale_Frontend.Components
 @using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
@@ -91,13 +92,13 @@
 
     private async Task HandleShowDetail(WhiskeyRequest request)
     {
-        var parameters = new DialogParameters<DetailDialog>
+        var parameters = new DialogParameters<RequestDetailDialog>
         {
             { x => x.Request, request},
             { x => x.RequestChanged, ViewModel.RequestChanged },
             { x => x.isModifyAvailble, !(request.is_completed)}
         };
-        var dialog = await DialogService.ShowAsync<DetailDialog>("요청 세부 정보", parameters);
+        var dialog = await DialogService.ShowAsync<RequestDetailDialog>("요청 세부 정보", parameters);
         var result = await dialog.Result;
     }
 
