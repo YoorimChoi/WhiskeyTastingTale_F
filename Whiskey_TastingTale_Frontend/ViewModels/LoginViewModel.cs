@@ -74,17 +74,23 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                     password_hash = password_hash
                 });
 
-            LoginDTO result = JsonConvert.DeserializeObject<LoginDTO>(response.ToString());
-            if (!string.IsNullOrEmpty(result.token))
+
+            if (!response.ToString().StartsWith("[ERR]")) {
+                LoginDTO result = JsonConvert.DeserializeObject<LoginDTO>(response.ToString());
+                if (!string.IsNullOrEmpty(result.token))
+                {
+                    _state.Token = result.token;
+                    _state.Email = result.email;
+                    _state.UserId = result.user_id;
+                    _state.Nickname = result.nickname;
+                    _state.Role = result.role;
+                    return true;
+                }
+                LoginResult = "이메일 혹은 비밀번호가 잘못되었습니다.";
+            }else
             {
-                _state.Token = result.token;
-                _state.Email = result.email;
-                _state.UserId = result.user_id;
-                _state.Nickname = result.nickname;
-                _state.Role = result.role;
-                return true;
+                LoginResult = "서버가 응답이 없습니다. 잠시 후 다시 접속해주세요.";
             }
-            LoginResult = "이메일 혹은 비밀번호가 잘못되었습니다.";
             return false; 
         }
 

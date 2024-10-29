@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -28,112 +27,90 @@ namespace Whiskey_TastingTale_Frontend.Services
         public async Task<object> Delete(string url)
         {
             object result = null;
-            Exception badEx = null;
-
-            using (var client = GetHttpClient())
+            try
             {
-                string apiUrl = url;
-                bool badStatus = false;
-                string badMessage = "";
-
-                //TODO : url 이랑 연결 안되면 죽는 이슈 
-                var response = await client.DeleteAsync(apiUrl);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = GetHttpClient())
                 {
-                    badStatus = true;
-                    badMessage = $"{response.StatusCode}";
+                    var response = await client.DeleteAsync(url);
+                    return await response.Content.ReadAsStringAsync();
                 }
-                return await response.Content.ReadAsStringAsync();
             }
-
-            if (badEx != null) throw badEx;
-
+            catch (HttpRequestException ex)
+            {
+                result = $"[ERR] Request failed: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                result = $"[ERR] Unexpected error: {ex.Message}";
+            }
             return result;
         }
         public async Task<object> Put(string url, object data)
         {
             object result = null;
-            Exception badEx = null;
-
-            using (var client = GetHttpClient())
+            try
             {
-                string apiUrl = url;
-                bool badStatus = false;
-                string badMessage = "";
-
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-
-                var test = JsonConvert.SerializeObject(data);
-
-                //TODO : url 이랑 연결 안되면 죽는 이슈 
-                var response = await client.PutAsync(apiUrl, content);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = GetHttpClient())
                 {
-                    badStatus = true;
-                    badMessage = $"{response.StatusCode}";
+                    var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(url, content);
+                    return await response.Content.ReadAsStringAsync();
                 }
-                return await response.Content.ReadAsStringAsync();
             }
-
-            if (badEx != null) throw badEx;
-
+            catch (HttpRequestException ex)
+            {
+                result = $"[ERR] Request failed: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                result = $"[ERR] Unexpected error: {ex.Message}";
+            }
             return result;
         }
         public async Task<object> Post(string url, object data)
         {
             object result = null;
-            Exception badEx = null;
 
-            using (var client = GetHttpClient())
+            try
             {
-                string apiUrl = url;
-                bool badStatus = false;
-                string badMessage = "";
-
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-
-                var test = JsonConvert.SerializeObject(data);
-
-                //TODO : url 이랑 연결 안되면 죽는 이슈 
-                var response = await client.PostAsync(apiUrl, content);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = GetHttpClient())
                 {
-                    badStatus = true;
-                    badMessage = $"{response.StatusCode}";
+                    var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(url, content);
+                    return await response.Content.ReadAsStringAsync();
                 }
-                return await response.Content.ReadAsStringAsync();
             }
-
-            if (badEx != null) throw badEx;
-
+            catch (HttpRequestException ex)
+            {
+                result = $"[ERR] Request failed: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                result = $"[ERR] Unexpected error: {ex.Message}";
+            }
             return result;
         }
+
         public async Task<object> PostImage(string url, MultipartFormDataContent content)
         {
             object result = null;
-            Exception badEx = null;
 
-            using (var client = GetHttpClient())
+            try
             {
-                string apiUrl = url;
-                bool badStatus = false;
-                string badMessage = "";
-
-                //TODO : url 이랑 연결 안되면 죽는 이슈 
-                var response = await client.PostAsync(apiUrl, content);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = GetHttpClient())
                 {
-                    badStatus = true;
-                    badMessage = $"{response.StatusCode}";
+                    var response = await client.PostAsync(url, content);
+                    return await response.Content.ReadAsStringAsync();
                 }
-                return await response.Content.ReadAsStringAsync();
             }
-
-            if (badEx != null) throw badEx;
+            catch (HttpRequestException ex)
+            {
+                result = $"[ERR] Request failed: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                result = $"[ERR] Unexpected error: {ex.Message}";
+            }
 
             return result;
         }
@@ -141,26 +118,23 @@ namespace Whiskey_TastingTale_Frontend.Services
         public async Task<object> Get(string url)
         {
             object result = null;
-            Exception badEx = null;
 
-            using (var client = GetHttpClient())
+            try
             {
-                string apiUrl = url;
-                bool badStatus = false;
-                string badMessage = "";
-
-                //TODO : url 이랑 연결 안되면 죽는 이슈 
-                var response = await client.GetAsync(apiUrl);
-
-                if (!response.IsSuccessStatusCode)
+                using (var client = GetHttpClient())
                 {
-                    badStatus = true;
-                    badMessage = $"{response.StatusCode}";
+                    var response = await client.GetAsync(url);
+                    return await response.Content.ReadAsStringAsync();
                 }
-                return await response.Content.ReadAsStringAsync();
             }
-
-            if (badEx != null) throw badEx;
+            catch (HttpRequestException ex)
+            {
+                result = $"[ERR] Request failed: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                result = $"[ERR] Unexpected error: {ex.Message}";
+            }
 
             return result;
         }

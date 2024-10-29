@@ -39,6 +39,17 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 OnPropertyChanged(nameof(SearchWord));
             }
         }
+        private bool isConnectedWithServer = false;
+
+        public bool IsConnectedWithServer
+        {
+            get => isConnectedWithServer;
+            set
+            {
+                isConnectedWithServer = value;
+                OnPropertyChanged(nameof(IsConnectedWithServer));
+            }
+        }
 
         private int page = 1; 
         public int Page
@@ -94,13 +105,24 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             string url = _apiHelper.server_uri + "Whiskey/name/"+ SearchWord + "?page=" + Page; 
             var response = await _apiHelper.Get(url);
-            
-            var result = JsonConvert.DeserializeObject<WhiskeyPageDTO>(response.ToString());
-            if (result.page != 0)
+            if (!response.ToString().StartsWith("[ERR]"))
             {
-                SearchResult = result.whiskeys;
-                TotalPage = result.totalPages;
-                TotalCount = result.totalCount;
+                var result = JsonConvert.DeserializeObject<WhiskeyPageDTO>(response.ToString());
+                if (result.page != 0)
+                {
+                    SearchResult = result.whiskeys;
+                    TotalPage = result.totalPages;
+                    TotalCount = result.totalCount;
+                }
+                IsConnectedWithServer = true;
+            }
+            else
+            {
+                IsConnectedWithServer = false;
+                SearchResult = new List<Whiskey>();
+                TotalPage = 1;
+                TotalCount = 1;
+                Page = 1; 
             }
         }
 
