@@ -1,4 +1,5 @@
-﻿@using Whiskey_TastingTale_Frontend.Services
+﻿@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Pages
 
@@ -7,6 +8,7 @@
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudPopoverProvider />
@@ -36,7 +38,6 @@
 </MudLayout>
 
 @code {
-
     private void HandleLoginClicked()
     {
         PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);

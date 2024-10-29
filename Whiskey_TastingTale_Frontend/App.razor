@@ -31,8 +31,12 @@
                 }
                 else if (UserState.Role.Equals("user"))
                 {
-                    return typeof(MainLayout);
+                    return typeof(UserLayout);
                 }
+            }
+            else
+            {
+                return typeof(MainLayout);
             }
 
             return typeof(MainLayout);

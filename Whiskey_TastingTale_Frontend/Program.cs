@@ -18,11 +18,14 @@ builder.Services.AddSingleton<UserManagementViewModel>();
 builder.Services.AddSingleton<RequestManagementViewMdoel>();
 builder.Services.AddSingleton<WhiskeyManagementViewMdoel>();
 builder.Services.AddSingleton<ReviewManagementViewMdoel>(); 
+builder.Services.AddSingleton<NotificationViewModel>();
 
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<PageState>();
 builder.Services.AddSingleton<WhiskeyState>();
 builder.Services.AddSingleton<RestApiHelper>();
+builder.Services.AddSignalR();
+
 
 builder.Services.AddServerSideBlazor()
     .AddCircuitOptions(options =>
