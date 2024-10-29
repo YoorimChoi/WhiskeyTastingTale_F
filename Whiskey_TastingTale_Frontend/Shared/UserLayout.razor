@@ -1,0 +1,125 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
+@using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Frontend.Services
+@using Whiskey_TastingTale_Frontend.ViewModels
+@using Whiskey_TastingTale_Frontend.Pages
+
+@inherits LayoutComponentBase
+@inject UserState State 
+@inject PageState PageState
+@inject NavigationManager NavigationManager
+@inject SearchViewModel ViewModel
+@inject NotificationViewModel NotificationViewModel
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudAvatar Square="true" @onclick="HandleHpmeClicked">
+            <MudImage Src="images/icon.png"></MudImage>
+        </MudAvatar>
+        <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
+        <MudTextField @bind-Value="ViewModel.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
+        @{
+            if(State.Token != null)
+            {
+                <MudBadge Content="@NotificationViewModel.NotificationNum" Color="Color.Secondary" Overlap="true" Dot Origin="Origin.TopRight" Class="mx-6 my-4">
+                    <MudIconButton Icon="@Icons.Material.Filled.Notifications" DropShadow Size="Size.Medium" Color="Color.Default" OnClick="@(() => NotificationViewModel.OpenNotificationList())" />
+                </MudBadge>
+                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">마이 페이지</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">로그인</MudButton>
+            }
+        }
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+    <MudDrawer @bind-Open="NotificationViewModel.IsOpen" Width="400px" Anchor="Anchor.End" Elevation="1" Variant="@DrawerVariant.Temporary" OverlayAutoClose="true" >
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">알림</MudText>
+        </MudDrawerHeader>
+        <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.SpaceEvenly" > 
+            <MudSpacer></MudSpacer>
+            <MudButton FullWidth Variant="Variant.Outlined" OnClick="NotificationViewModel.ChangeAllRead"> 모두 읽음 </MudButton>
+            <MudButton FullWidth Variant="Variant.Outlined" Color="Color.Secondary" OnClick="NotificationViewModel.DeleteAll"> 모두 삭제 </MudButton>
+            <MudSpacer></MudSpacer>
+        </MudStack>
+        
+        <MudDivider Style="margin:20px" Light DividerType="DividerType.Middle"></MudDivider>
+        <MudGrid>
+            @foreach (var notification in NotificationViewModel.Notifications)
+            {
+                <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(notification))" Style="margin-left:15px; margin-right:15px;">
+
+                    <MudBadge Color="Color.Primary" Dot Overlap Style="width:100%" Visible="@(!notification.is_read)">
+                        <MudCard Style="margin-left:10px; margin-right:10px; cursor: pointer;" >
+                            <MudCardContent >
+                                <MudStack>
+                                        <MudText Typo="Typo.caption"> @notification.created_at</MudText>
+                                        <MudText Typo="Typo.body2"> @notification.message </MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudBadge>
+                </MudItem>
+            }  
+        </MudGrid>
+        <MudPagination Style="justify-content: center; margin:20px" ShowFirstButton="true" ShowLastButton="true" Count="NotificationViewModel.TotalPage" SelectedChanged="NotificationViewModel.PageChanged" />
+    </MudDrawer>
+</MudLayout>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        NotificationViewModel.OnStateChange = () => InvokeAsync(StateHasChanged);
+        await NotificationViewModel.LoadData(); 
+        await NotificationViewModel.initSignalR(); 
+    }
+
+    private void HandleLoginClicked()
+    {
+        PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.NavigateTo("/login" );
+    }
+
+    private void HandleLogoutClicked()
+    {
+        State.init();
+        if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("mypage")){
+            NavigationManager.NavigateTo("/home" );
+
+        }
+    }
+    private void HandleMyPageClicked()
+    {
+        NavigationManager.NavigateTo("/mypage" );
+    }
+    private void HandleHpmeClicked()
+    {
+        PageState.init();  
+        NavigationManager.NavigateTo("/home" );
+    }
+
+    private void HandleKeyPress(KeyboardEventArgs args)
+    {
+
+        if (args.Key == "Enter" && ViewModel.SearchWord != String.Empty)
+        {
+            NavigationManager.NavigateTo("/search", forceLoad:true );
+        }
+    }
+
+    private async Task HandleItemClick(Notification notification)
+    {
+        var nextUrl = await NotificationViewModel.HandleItemClick(notification); 
+        if (!string.IsNullOrEmpty(nextUrl)) NavigationManager.NavigateTo(nextUrl);
+    }
+}
