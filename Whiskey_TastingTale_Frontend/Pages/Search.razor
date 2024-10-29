@@ -1,37 +1,45 @@
 ﻿@page "/search"
+
 @using Whiskey_TastingTale_Backend.Model
 @using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Components
+
 @inject SearchViewModel ViewModel 
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 
 <div style="margin-top:20px; display: flex; justify-content: center; width: 100%;">
     <MudStack Style="min-width:400px;max-width:1000px;">
-        <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
-        <MudGrid Spacing="1" Class="pt-2" >
-            @foreach (Whiskey product in ViewModel.SearchResult)
-            {
-                <MudItem xs="12" sm="6" md="4" @onclick="@(() => HandleItemClick(product))" @key="product.whiskey_id" >
-                    <MudCard Class="card-fixed-size"> 
-                        <MudCardContent>
-                            <MudStack AlignItems="AlignItems.Center">
-                                <MudImage Style="width:320px;height:200px;" Src=@GetFullImageUrl(product.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
-                            </MudStack>
-                            <MudText Style="margin-top:10px" Typo="Typo.body1" Class="text-ellipsis">@product.whiskey_name</MudText>
-                            <MudStack Row="true">
-                                <RatingComponent RatingValue=product.rating> </RatingComponent>
-                                <MudText Typo="Typo.overline"  Class="text-ellipsis">
-                                    @Double.Round(product.rating, 1) 점 / @product.review_count 개의 리뷰
-                                </MudText>
-                            </MudStack>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-            }
-        </MudGrid>
-        <MudPagination Style="justify-content: center; margin-bottom:20px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
+        @if (!ViewModel.IsConnectedWithServer)
+        {
+            <MudText> 서버와 연결되지 않았습니다. 잠시후 다시 검색 바랍니다.</MudText>
+
+        }else {
+            <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
+            <MudGrid Spacing="1" Class="pt-2">
+                @foreach (Whiskey product in ViewModel.SearchResult)
+                {
+                    <MudItem xs="12" sm="6" md="4" @onclick="@(() => HandleItemClick(product))" @key="product.whiskey_id">
+                        <MudCard Class="card-fixed-size">
+                            <MudCardContent>
+                                <MudStack AlignItems="AlignItems.Center">
+                                    <MudImage Style="width:320px;height:200px;" Src=@GetFullImageUrl(product.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+                                </MudStack>
+                                <MudText Style="margin-top:10px" Typo="Typo.body1" Class="text-ellipsis">@product.whiskey_name</MudText>
+                                <MudStack Row="true">
+                                    <RatingComponent RatingValue=product.rating> </RatingComponent>
+                                    <MudText Typo="Typo.overline" Class="text-ellipsis">
+                                        @Double.Round(product.rating, 1) 점 / @product.review_count 개의 리뷰
+                                    </MudText>
+                                </MudStack>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+            <MudPagination Style="justify-content: center; margin-bottom:20px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
+        }
     </MudStack>
 </div>
 
