@@ -8,6 +8,7 @@
 @inject SearchViewModel ViewModel 
 @inject PageState PageState
 @inject NavigationManager NavigationManager
+@inject RestApiHelper helper
 
 <div style="margin-top:20px; display: flex; justify-content: center; width: 100%;">
     <MudStack Style="min-width:400px;max-width:1000px;">
@@ -51,7 +52,7 @@
     }
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private async void HandleItemClick(Whiskey product)

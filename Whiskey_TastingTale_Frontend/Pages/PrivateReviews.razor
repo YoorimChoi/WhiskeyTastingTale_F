@@ -8,6 +8,7 @@
 @inject UserState UserState
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject RestApiHelper helper
 
 
 
@@ -75,7 +76,7 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private async void HandleItemClick(ReviewWhiskeyDTO review)

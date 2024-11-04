@@ -9,7 +9,7 @@
 @inject PageState PageState
 
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
+@inject RestApiHelper helper
 
 
 <MudAppBar>
@@ -81,6 +81,6 @@
     }
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 }

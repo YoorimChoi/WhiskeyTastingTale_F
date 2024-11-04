@@ -9,6 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject UserState userState 
 
+@inject RestApiHelper helper
+
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
 </MudAppBar>
@@ -75,6 +77,6 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 }

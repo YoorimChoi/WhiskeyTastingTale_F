@@ -6,6 +6,7 @@
 @inject PageState PageState
 @inject MyPageViewModel ViewModel
 @inject NavigationManager NavigationManager
+@inject RestApiHelper helper
 
 
 <div style="display: flex; justify-content: center; width: 100%;">
@@ -120,7 +121,7 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private void modifyUserInfo()
