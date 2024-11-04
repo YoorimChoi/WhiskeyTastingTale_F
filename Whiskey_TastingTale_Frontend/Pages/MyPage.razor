@@ -10,24 +10,25 @@
 
 
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; max-width:600px; min-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; max-width:600px; min-width:600px;">
         <MudCardContent>
             <MudStack Row="true">
                 <MudText Style="Margin:7px"> <b>"@UserState.Nickname" 님의 마이페이지</b></MudText>
                 <MudSpacer></MudSpacer>
-                <MudButton OnClick="modifyUserInfo" Style="background-color:white"> 정보 수정 </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="modifyUserInfo"> 정보 수정 </MudButton>
             </MudStack>
         </MudCardContent>
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px;">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
                 <div style="flex-grow: 1;"></div>
                 <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Color = "Color.Secondary"
                                Size="Size.Small"
                                OnClick="@ShowWhiskeyAddPage">
                 </MudIconButton>
@@ -36,14 +37,15 @@
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px;">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
                 <div style="flex-grow: 1;"></div> 
                 <MudIconButton 
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
+                    Color = "Color.Secondary"
                     Size="Size.Small"
                                OnClick="@ShowMorePrivateReview">
                 </MudIconButton>

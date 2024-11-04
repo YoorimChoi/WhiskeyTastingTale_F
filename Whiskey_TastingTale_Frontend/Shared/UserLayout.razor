@@ -27,8 +27,8 @@
         @{
             if(State.Token != null)
             {
-                <MudBadge Content="@NotificationViewModel.NotificationNum" Color="Color.Secondary" Overlap="true" Dot Origin="Origin.TopRight" Class="mx-6 my-4">
-                    <MudIconButton Icon="@Icons.Material.Filled.Notifications" DropShadow Size="Size.Medium" Color="Color.Default" OnClick="@(() => NotificationViewModel.OpenNotificationList())" />
+                <MudBadge Content="@NotificationViewModel.NotificationNum" Color="Color.Primary" Overlap="true" Dot Origin="Origin.TopRight" Class="mx-6 my-4">
+                    <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Secondary" DropShadow Size="Size.Medium" OnClick="@(() => NotificationViewModel.OpenNotificationList())" />
                 </MudBadge>
                 <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">마이 페이지</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>

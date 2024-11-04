@@ -20,9 +20,8 @@
     }
 </MudAppBar>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; min-width:600px; max-width:600px; background-color:lightgrey">
-        <MudCardContent>
+<div style="display: flex; justify-content: center; width: 100%; margin:20px">
+    <MudStack>
             <MudStack Row="true" Justify="Justify.FlexStart">
                 <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
                 <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
@@ -56,8 +55,7 @@
                     <MudPagination Style="justify-content: center;" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
                 </MudStack>
             }
-        </MudCardContent>
-    </MudCard>
+    </MudStack>
 </div>
 
 

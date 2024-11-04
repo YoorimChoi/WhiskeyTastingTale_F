@@ -16,7 +16,7 @@
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
 </MudAppBar>
 
-<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;">
+<MudStack Style="max-width: 600px; margin: auto; margin-top: 100px;">
     <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
         <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
         <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
@@ -71,8 +71,7 @@
         <MudText Typo="Typo.caption"> @ViewModel.DeleteResult </MudText>
         <MudButton Size="@Size.Small" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAddWhiskey">위스키 추가 요청</MudButton>
     </div>
-</MudPaper>
-
+</MudStack>
 @code{
 
     private async Task GoBack()
