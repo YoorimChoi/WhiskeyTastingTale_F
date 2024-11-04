@@ -27,7 +27,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             _helper = helper;
             _userState = userState;
 
-            _signalRService = new SignalRService(userState); 
+            _signalRService = new SignalRService(userState, configuration); 
             _signalRService.OnMessageReceived += RecieveSignal;
         }
 
