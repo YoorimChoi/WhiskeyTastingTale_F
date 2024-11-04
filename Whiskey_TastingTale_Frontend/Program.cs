@@ -35,6 +35,10 @@ builder.Services.AddServerSideBlazor()
         options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
     });
 
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.HttpsPort = 8001; // HTTPS 포트 설정
+});
 
 var app = builder.Build();
 
