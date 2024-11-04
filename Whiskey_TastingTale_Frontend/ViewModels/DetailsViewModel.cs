@@ -9,11 +9,11 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 {
     public class DetailsViewModel : INotifyPropertyChanged
     {
-        private readonly WhiskeyState _whiskeyState;
+        private readonly SelectState _whiskeyState;
         private readonly UserState _userState;
         private readonly RestApiHelper _apiHelper; 
 
-        public DetailsViewModel(WhiskeyState whiskeyState, UserState userState, RestApiHelper apiHelper)
+        public DetailsViewModel(SelectState whiskeyState, UserState userState, RestApiHelper apiHelper)
         {
             _whiskeyState = whiskeyState;
             _userState = userState;
@@ -136,7 +136,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-            SelectedWhiskey = _whiskeyState.Selected;
+            SelectedWhiskey = _whiskeyState.SelectedWhiskey;
             var whiskey = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + SelectedWhiskey.whiskey_id);
             if (whiskey != null)
             {

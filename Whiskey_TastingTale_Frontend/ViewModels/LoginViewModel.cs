@@ -80,10 +80,13 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 if (!string.IsNullOrEmpty(result.token))
                 {
                     _state.Token = result.token;
-                    _state.Email = result.email;
-                    _state.UserId = result.user_id;
-                    _state.Nickname = result.nickname;
-                    _state.Role = result.role;
+                    _state.User = new User
+                    {
+                        email = result.email,
+                        user_id = result.user_id,
+                        nickname = result.nickname,
+                        role = result.role
+                    };
                     return true;
                 }
                 LoginResult = "이메일 혹은 비밀번호가 잘못되었습니다.";

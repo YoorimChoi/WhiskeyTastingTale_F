@@ -22,7 +22,7 @@
     {
         get
         {
-            if (!string.IsNullOrEmpty(UserState.Email))
+            if (!string.IsNullOrEmpty(UserState.Token))
             {
                 // 역할에 따라 레이아웃 변경
                 if (UserState.Role.Equals("admin"))

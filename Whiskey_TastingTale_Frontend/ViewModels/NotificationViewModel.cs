@@ -10,7 +10,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 {
     public class NotificationViewModel : INotifyPropertyChanged
     {
-        private readonly WhiskeyState _whiskeyState;
+        private readonly SelectState _whiskeyState;
         private readonly SignalRService _signalRService;
         private readonly UserState _userState;
         private readonly RestApiHelper _helper; 
@@ -21,7 +21,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         private List<Notification> notifications = new List<Notification>();
 
-        public NotificationViewModel(WhiskeyState whiskeyState, RestApiHelper helper, UserState userState)
+        public NotificationViewModel(SelectState whiskeyState, RestApiHelper helper, UserState userState, IConfiguration configuration)
         {
             _whiskeyState = whiskeyState;
             _helper = helper;
@@ -169,7 +169,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
             if (!string.IsNullOrEmpty(notification.notification_type) && notification.notification_type.Equals("addwhiskey"))
             {
-                _whiskeyState.Selected = new Whiskey()
+                _whiskeyState.SelectedWhiskey = new Whiskey()
                 {
                     whiskey_id = notification.related_entity_id?? 0
                 };

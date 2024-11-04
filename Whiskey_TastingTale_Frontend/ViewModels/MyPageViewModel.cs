@@ -1,25 +1,21 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 using Whiskey_TastingTale_Backend.API.DTOs;
-using Whiskey_TastingTale_Backend.Data.Entities;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
 
 namespace Whiskey_TastingTale_Frontend.ViewModels
 {
-    
-
     public class MyPageViewModel : INotifyPropertyChanged
     {
         private readonly UserState _userState;
-        private readonly WhiskeyState _whiskeyState;
+        private readonly SelectState _whiskeyState;
         private readonly RestApiHelper _apiHelper; 
 
         private List<ReviewWhiskeyDTO> myReviews = new List<ReviewWhiskeyDTO>(); 
         private List<WishWhiskeyDTO> myWishs = new List<WishWhiskeyDTO>();
 
-        public MyPageViewModel(UserState userSate, WhiskeyState whiskeyState, RestApiHelper apiHelper)
+        public MyPageViewModel(UserState userSate, SelectState whiskeyState, RestApiHelper apiHelper)
         {
             _userState = userSate;
             _whiskeyState = whiskeyState;
@@ -156,22 +152,22 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task ClickedReviewItem(ReviewWhiskeyDTO review)
         {
-            _whiskeyState.Selected = null;
+            _whiskeyState.SelectedWhiskey = null;
             var whiskey_result = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + review.whiskey_id);
             if (whiskey_result != null)
             {
-                _whiskeyState.Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
+                _whiskeyState.SelectedWhiskey = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
             }
 
         }
 
         public async Task ClickedWishItem(WishWhiskeyDTO wish)
         {
-            _whiskeyState.Selected = null;
+            _whiskeyState.SelectedWhiskey = null;
             var whiskey_result = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + wish.whiskey_id);
             if (whiskey_result != null)
             {
-                _whiskeyState.Selected = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
+                _whiskeyState.SelectedWhiskey = JsonConvert.DeserializeObject<Whiskey>(whiskey_result.ToString());
             }
 
         }

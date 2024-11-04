@@ -11,12 +11,12 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
     public class RequestManagementViewMdoel
     {
         private readonly RestApiHelper _helper;
-        private readonly WhiskeyState _whiskeyState; 
+        private readonly SelectState _whiskeyState; 
 
         private List<WhiskeyRequestUserDTO> requests;
         private string handleRequestResult; 
 
-        public RequestManagementViewMdoel(RestApiHelper helper, WhiskeyState whiskeyState)
+        public RequestManagementViewMdoel(RestApiHelper helper, SelectState whiskeyState)
         {
             _helper = helper;
             _whiskeyState = whiskeyState;
@@ -59,7 +59,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public void HandleMoveWhiskeyInfo(WhiskeyRequestUserDTO request)
         {
-            _whiskeyState.Selected = new Whiskey() { whiskey_id = request.whiskey_id ?? -1 };
+            _whiskeyState.SelectedWhiskey = new Whiskey() { whiskey_id = request.whiskey_id ?? -1 };
         }
 
         public async Task HandleAccept(WhiskeyRequestUserDTO request)

@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 using Whiskey_TastingTale_Backend.API.DTOs;
 using Whiskey_TastingTale_Backend.Model;
 using Whiskey_TastingTale_Frontend.Services;
@@ -11,15 +8,16 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 {
     public class SearchViewModel : INotifyPropertyChanged
     {
-        private readonly WhiskeyState _whiskeyState;
+        private readonly UserState _userState;
+        private readonly SelectState _selectState;
         private readonly RestApiHelper _apiHelper; 
-        public SearchViewModel(WhiskeyState whiskeyState, RestApiHelper apiHelper)
+        public SearchViewModel(SelectState selectState, RestApiHelper apiHelper, UserState userState)
         {
-            _whiskeyState = whiskeyState;
+            _selectState = selectState;
+            _userState = userState;
             _apiHelper = apiHelper;
         }
 
-        private string searchWord = String.Empty;
         private List<Whiskey> searachResult = new List<Whiskey>();
         public List<Whiskey> SearchResult {
             get => searachResult; 
@@ -30,15 +28,6 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             }
         }
 
-        public string SearchWord
-        {
-            get => searchWord;
-            set
-            {
-                searchWord = value;
-                OnPropertyChanged(nameof(SearchWord));
-            }
-        }
         private bool isConnectedWithServer = false;
 
         public bool IsConnectedWithServer
@@ -103,12 +92,12 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
-            string url = _apiHelper.server_uri + "Whiskey/name/"+ SearchWord + "?page=" + Page; 
+            string url = _apiHelper.server_uri + "Whiskey/name/"+ _selectState.SearchWord + "?page=" + Page; 
             var response = await _apiHelper.Get(url);
             if (!response.ToString().StartsWith("[ERR]"))
             {
                 var result = JsonConvert.DeserializeObject<WhiskeyPageDTO>(response.ToString());
-                if (result.page != 0)
+                if (result != null && result.page != 0)
                 {
                     SearchResult = result.whiskeys;
                     TotalPage = result.totalPages;
@@ -134,7 +123,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task ClickedItem(Whiskey product)
         {
-            _whiskeyState.Selected = product; 
+            _selectState.SelectedWhiskey = product; 
         }
     }
 }
