@@ -26,6 +26,7 @@ builder.Services.AddSingleton<WhiskeyState>();
 builder.Services.AddSingleton<RestApiHelper>();
 builder.Services.AddSignalR();
 
+builder.Services.AddSingleton(new CustomMudTheme());
 
 builder.Services.AddServerSideBlazor()
     .AddCircuitOptions(options =>
