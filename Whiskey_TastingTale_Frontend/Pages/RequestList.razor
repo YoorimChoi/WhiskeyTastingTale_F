@@ -73,17 +73,21 @@
     </div>
 </MudStack>
 @code{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await ViewModel.LoadData();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
 
     private async Task GoBack()
     {
         NavigationManager.NavigateTo("/mypage");
     }
-    protected override async Task OnInitializedAsync()
-    {
-        await ViewModel.LoadData();
-        base.OnInitialized();
-    }
-
     private void HandleAddWhiskey()
     {
         NavigationManager.NavigateTo("/add_whiskey");

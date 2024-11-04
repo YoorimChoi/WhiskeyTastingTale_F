@@ -20,6 +20,18 @@
 @code {
     private MudForm form;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+
+            StateHasChanged();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
     private async Task HandleLogin()
     {
         await form.Validate();

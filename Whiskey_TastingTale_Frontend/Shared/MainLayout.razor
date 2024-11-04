@@ -4,8 +4,9 @@
 @using Whiskey_TastingTale_Frontend.Pages
 
 @inherits LayoutComponentBase
-@inject UserState State 
+@inject UserState UserState
 @inject PageState PageState
+@inject SelectState SelectState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
 @inject CustomMudTheme CustomTheme
@@ -20,9 +21,9 @@
             <MudImage Src="images/icon.png"></MudImage>
         </MudAvatar>
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
-        <MudTextField @bind-Value="ViewModel.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
+        <MudTextField @bind-Value="SelectState.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
         @{
-            if(State.Token != null)
+            if (UserState.Token != null)
             {
                 <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">마이 페이지</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
@@ -39,6 +40,18 @@
 </MudLayout>
 
 @code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+            await SelectState.LoadStateAsync();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
     private void HandleLoginClicked()
     {
         PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
@@ -47,7 +60,7 @@
 
     private void HandleLogoutClicked()
     {
-        State.init();
+        UserState.init();
         if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("mypage")){
             NavigationManager.NavigateTo("/home" );
 
@@ -66,9 +79,9 @@
     private void HandleKeyPress(KeyboardEventArgs args)
     {
 
-        if (args.Key == "Enter" && ViewModel.SearchWord != String.Empty)
+        if (args.Key == "Enter" && SelectState.SearchWord != String.Empty)
         {
-            NavigationManager.NavigateTo("/search", forceLoad:true );
+            NavigationManager.NavigateTo("/search");
         }
     }
 }

@@ -64,10 +64,17 @@
 
 
 @code {
-    protected override async Task OnInitializedAsync()
+    
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ViewModel.LoadData();
-        base.OnInitialized();
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await ViewModel.LoadData();
+        }
+
+        base.OnAfterRender(firstRender);
     }
 
     private async Task GoBack()

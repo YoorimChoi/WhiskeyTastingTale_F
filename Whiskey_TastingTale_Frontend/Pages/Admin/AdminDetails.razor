@@ -3,6 +3,7 @@
 @using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Components
+
 @inject DetailsViewModel ViewModel
 @inject PageState PageState
 @inject UserState UserState
@@ -69,11 +70,19 @@
 
 
 @code {
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ViewModel.LoadData();
-        base.OnInitialized();
-    }
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+            await ViewModel.LoadData();
+        }
+
+        base.OnAfterRender(firstRender);
+    } 
+
     private async Task GoBack()
     {
         NavigationManager.NavigateTo(PageState.PriviousPage);

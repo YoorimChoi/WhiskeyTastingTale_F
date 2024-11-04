@@ -17,6 +17,14 @@
 </CascadingValue>
 
 @code{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UserState.LoadStateAsync();
+        }
+        base.OnAfterRender(firstRender);
+    }
 
     private Type SelectLayoutBasedOnRole
     {

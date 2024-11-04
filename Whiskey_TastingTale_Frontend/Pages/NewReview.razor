@@ -6,8 +6,7 @@
 @inject DetailsViewModel ViewModel
 @inject NavigationManager NavigationManager
 @inject PageState PageState
-@inject IJSRuntime JSRuntime
-@inject UserState userState 
+@inject UserState UserState
 
 @inject RestApiHelper helper
 
@@ -57,12 +56,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (userState.Token == null) {
+        if (UserState.Token == null) {
             PageState.PriviousPage = "/newreview";
             NavigationManager.NavigateTo("/login");
         }
 
         base.OnInitialized();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+
+            await ViewModel.LoadData();
+        }
+
+        base.OnAfterRender(firstRender);
     }
     private async Task GoBack()
     {

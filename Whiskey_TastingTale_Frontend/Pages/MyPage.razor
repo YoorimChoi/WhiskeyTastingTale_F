@@ -1,9 +1,12 @@
 ﻿@page "/mypage"
+
 @using Whiskey_TastingTale_Frontend.Components
 @using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
+
 @inject UserState UserState
 @inject PageState PageState
+
 @inject MyPageViewModel ViewModel
 @inject NavigationManager NavigationManager
 @inject RestApiHelper helper
@@ -72,20 +75,19 @@
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; ">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>내 위시리스트</b>  </MudText>
                 <div style="flex-grow: 1;"></div> 
                 <MudIconButton 
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
                     Size="Size.Small"
-                               OnClick="@ShowMoreWishList">
+                    Color = "Color.Secondary"
+                    OnClick="@ShowMoreWishList">
                 </MudIconButton>
             </MudStack>
-            <MudCard Style=" margin-top:10px;background-color:white">
-                <MudCardContent>
             @if(ViewModel.MyWishs.Count != 0)
             {
                 <MudGrid Spacing="1" Class="pt-2">
@@ -107,18 +109,24 @@
             {
                 <MudText Typo="Typo.body2"> 위시리스트가 없습니다. </MudText>
             }
-                </MudCardContent>
-            </MudCard>
         </MudCardContent>
     </MudCard>
 </div>
 
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ViewModel.LoadData(); 
-        base.OnInitializedAsync();
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync(); 
+
+            await ViewModel.LoadData();
+            StateHasChanged(); 
+        }
+
+        base.OnAfterRender(firstRender);
     }
 
     private string GetFullImageUrl(string imagePath)
