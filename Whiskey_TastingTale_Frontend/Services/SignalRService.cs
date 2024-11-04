@@ -8,16 +8,22 @@ namespace Whiskey_TastingTale_Frontend.Services
     public class SignalRService : IAsyncDisposable
     {
         private readonly UserState _userState;
+        private readonly IConfiguration _configuration;
+        private string server_uri; 
+
         private HubConnection _connection;
 
         public event Action<Notification> OnMessageReceived; // 메시지가 수신되었을 때 발생하는 이벤트
 
-        public SignalRService(UserState userState)
+        public SignalRService(UserState userState, IConfiguration configuration)
         {
             _userState = userState; 
+            _configuration = configuration;
+            server_uri = _configuration["BackendSettings:ServerUrl"];
         }
-        public async Task StartConnectionAsync(string hubUrl = "https://localhost:7299/notificationHub")
+        public async Task StartConnectionAsync()
         {
+            var hubUrl = server_uri + "notificationHub"; 
             _connection = new HubConnectionBuilder()
                 .WithUrl(hubUrl, options =>
                 {
