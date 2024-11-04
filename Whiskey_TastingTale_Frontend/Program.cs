@@ -1,3 +1,4 @@
+using Elastic.Apm.AspNetCore;
 using MudBlazor.Services;
 
 using Whiskey_TastingTale_Frontend.Services;
@@ -28,6 +29,8 @@ builder.Services.AddSignalR();
 
 builder.Services.AddSingleton(new CustomMudTheme());
 
+builder.Services.AddElasticApm();
+
 builder.Services.AddServerSideBlazor()
     .AddCircuitOptions(options =>
     {
@@ -47,6 +50,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseElasticApm();
 
 app.UseHttpsRedirection();
 
