@@ -49,6 +49,15 @@
 </MudPaper>
 
 @code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
     private async Task HandleRegister()
     {
         var result = await ViewModel.HandleRegister();

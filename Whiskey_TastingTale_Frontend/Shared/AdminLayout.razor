@@ -3,12 +3,13 @@
 @using Whiskey_TastingTale_Frontend.Pages
 
 @inherits LayoutComponentBase
-@inject UserState State 
+@inject UserState UserState
 @inject PageState PageState
 @inject NavigationManager NavigationManager
 @inject SearchViewModel ViewModel
+@inject CustomMudTheme CustomTheme
 
-<MudThemeProvider />
+<MudThemeProvider Theme="CustomTheme"  />
 <MudDialogProvider />
 <MudPopoverProvider />
 
@@ -20,7 +21,7 @@
         <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
         <MudSpacer></MudSpacer>
         @{
-            if(State.Token != null)
+            if (UserState.Token != null)
             {
                 <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAdminPageClicked">관리자 페이지</MudButton>
                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
@@ -37,7 +38,16 @@
 </MudLayout>
 
 @code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+        }
 
+        base.OnAfterRender(firstRender);
+    }
     private void HandleLoginClicked()
     {
         PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
@@ -46,7 +56,7 @@
 
     private void HandleLogoutClicked()
     {
-        State.init();
+        UserState.init();
         if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("adminpage")){
             NavigationManager.NavigateTo("/home" );
 

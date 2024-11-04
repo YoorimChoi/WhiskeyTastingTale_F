@@ -5,18 +5,22 @@
 @using Whiskey_TastingTale_Frontend.ViewModels
 @using Whiskey_TastingTale_Frontend.Components
 
-@inject SearchViewModel ViewModel 
+@inject UserState UserState
 @inject PageState PageState
+@inject SelectState SelectState
+
+@inject SearchViewModel ViewModel
 @inject NavigationManager NavigationManager
+@inject RestApiHelper helper
 
 <div style="margin-top:20px; display: flex; justify-content: center; width: 100%;">
     <MudStack Style="min-width:400px;max-width:1000px;">
         @if (!ViewModel.IsConnectedWithServer)
-        {
+        { 
             <MudText> 서버와 연결되지 않았습니다. 잠시후 다시 검색 바랍니다.</MudText>
 
         }else {
-            <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@ViewModel.SearchWord" 검색 결과</MudText>
+            <MudText Typo="Typo.h5" Align="Align.Left" GutterBottom="true">"@SelectState.SearchWord" 검색 결과</MudText>
             <MudGrid Spacing="1" Class="pt-2">
                 @foreach (Whiskey product in ViewModel.SearchResult)
                 {
@@ -44,14 +48,24 @@
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ViewModel.LoadData();
-        base.OnInitialized();
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await SelectState.LoadStateAsync();
+            await UserState.LoadStateAsync(); 
+
+            await ViewModel.LoadData();
+            StateHasChanged(); 
+        }
+
+        base.OnAfterRender(firstRender);
     }
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private async void HandleItemClick(Whiskey product)

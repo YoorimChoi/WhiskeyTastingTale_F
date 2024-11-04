@@ -6,8 +6,9 @@
 @inject DetailsViewModel ViewModel
 @inject NavigationManager NavigationManager
 @inject PageState PageState
-@inject IJSRuntime JSRuntime
-@inject UserState userState 
+@inject UserState UserState
+
+@inject RestApiHelper helper
 
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
@@ -55,12 +56,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (userState.Token == null) {
+        if (UserState.Token == null) {
             PageState.PriviousPage = "/newreview";
             NavigationManager.NavigateTo("/login");
         }
 
         base.OnInitialized();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+
+            await ViewModel.LoadData();
+        }
+
+        base.OnAfterRender(firstRender);
     }
     private async Task GoBack()
     {
@@ -75,6 +88,6 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 }

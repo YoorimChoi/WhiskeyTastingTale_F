@@ -9,7 +9,6 @@
 @inject PageState PageState
 
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
 
 
 <MudAppBar>
@@ -103,6 +102,16 @@
 
 
 @code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
     private async Task GoBack()
     {
         NavigationManager.NavigateTo("/details");
@@ -118,13 +127,13 @@
     }
     private void HandleMyPageClicked()
     {
-        NavigationManager.NavigateTo("/mypage", forceLoad: true);
+        NavigationManager.NavigateTo("/mypage");
     }
 
     private void HandleLoginClicked()
     {
         PageState.PriviousPage = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.NavigateTo("/login", forceLoad: true);
+        NavigationManager.NavigateTo("/login");
     }
 
     private void HandleLogoutClicked()

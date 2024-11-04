@@ -7,11 +7,16 @@ namespace Whiskey_TastingTale_Frontend.Services
     public class RestApiHelper
     {
         private readonly UserState _userState; 
-        public  string server_uri = "https://localhost:7299/";
+        public string server_uri; 
 
-        public RestApiHelper(UserState userState)
+        private readonly IConfiguration _configuration;
+
+
+        public RestApiHelper(UserState userState, IConfiguration configuration)
         {
             _userState = userState;
+            _configuration = configuration;
+            server_uri = _configuration["BackendSettings:ServerUrl"];
         }
 
         private HttpClient GetHttpClient()

@@ -12,8 +12,8 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         private string deleteResult = string.Empty; 
 
         private readonly RestApiHelper _helper;
-        private readonly WhiskeyState _whiskeyState; 
-        public RequestListViewModel(RestApiHelper helper, WhiskeyState whiskeyState)
+        private readonly SelectState _whiskeyState; 
+        public RequestListViewModel(RestApiHelper helper, SelectState whiskeyState)
         {
             _helper = helper;
             _whiskeyState = whiskeyState; 
@@ -79,7 +79,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         }
         public void HandleMoveWhiskeyInfo(WhiskeyRequest request)
         {
-            _whiskeyState.Selected = new Whiskey() { whiskey_id = request.whiskey_id ?? -1 }; 
+            _whiskeyState.SelectedWhiskey = new Whiskey() { whiskey_id = request.whiskey_id ?? -1 }; 
         }
     }
 }

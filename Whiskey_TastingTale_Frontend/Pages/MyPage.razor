@@ -1,32 +1,37 @@
 ﻿@page "/mypage"
+
 @using Whiskey_TastingTale_Frontend.Components
 @using Whiskey_TastingTale_Frontend.Services
 @using Whiskey_TastingTale_Frontend.ViewModels
+
 @inject UserState UserState
 @inject PageState PageState
+
 @inject MyPageViewModel ViewModel
 @inject NavigationManager NavigationManager
+@inject RestApiHelper helper
 
 
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; max-width:600px; min-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; max-width:600px; min-width:600px;">
         <MudCardContent>
             <MudStack Row="true">
                 <MudText Style="Margin:7px"> <b>"@UserState.Nickname" 님의 마이페이지</b></MudText>
                 <MudSpacer></MudSpacer>
-                <MudButton OnClick="modifyUserInfo" Style="background-color:white"> 정보 수정 </MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="modifyUserInfo"> 정보 수정 </MudButton>
             </MudStack>
         </MudCardContent>
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px;">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
                 <div style="flex-grow: 1;"></div>
                 <MudIconButton Icon="@Icons.Material.Filled.ArrowForwardIos"
+                               Color = "Color.Secondary"
                                Size="Size.Small"
                                OnClick="@ShowWhiskeyAddPage">
                 </MudIconButton>
@@ -35,14 +40,15 @@
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px;">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
                 <div style="flex-grow: 1;"></div> 
                 <MudIconButton 
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
+                    Color = "Color.Secondary"
                     Size="Size.Small"
                                OnClick="@ShowMorePrivateReview">
                 </MudIconButton>
@@ -69,20 +75,19 @@
     </MudCard>
 </div>
 <div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; background-color:lightgrey">
+    <MudCard Style="margin:20px; margin-top:0px; min-width:600px; max-width:600px; ">
         <MudCardContent>
             <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" Color = "Color.Secondary"/>
                 <MudText Typo="Typo.body2"> <b>내 위시리스트</b>  </MudText>
                 <div style="flex-grow: 1;"></div> 
                 <MudIconButton 
                     Icon="@Icons.Material.Filled.ArrowForwardIos" 
                     Size="Size.Small"
-                               OnClick="@ShowMoreWishList">
+                    Color = "Color.Secondary"
+                    OnClick="@ShowMoreWishList">
                 </MudIconButton>
             </MudStack>
-            <MudCard Style=" margin-top:10px;background-color:white">
-                <MudCardContent>
             @if(ViewModel.MyWishs.Count != 0)
             {
                 <MudGrid Spacing="1" Class="pt-2">
@@ -104,23 +109,29 @@
             {
                 <MudText Typo="Typo.body2"> 위시리스트가 없습니다. </MudText>
             }
-                </MudCardContent>
-            </MudCard>
         </MudCardContent>
     </MudCard>
 </div>
 
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await ViewModel.LoadData(); 
-        base.OnInitializedAsync();
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync(); 
+
+            await ViewModel.LoadData();
+            StateHasChanged(); 
+        }
+
+        base.OnAfterRender(firstRender);
     }
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private void modifyUserInfo()

@@ -1,5 +1,8 @@
 ﻿@using Whiskey_TastingTale_Backend.API.DTOs
 @using Whiskey_TastingTale_Backend.Data.Entities
+@using Whiskey_TastingTale_Frontend.Services
+
+@inject RestApiHelper helper
 
 <MudDialog  >
     <TitleContent>
@@ -38,6 +41,6 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 }

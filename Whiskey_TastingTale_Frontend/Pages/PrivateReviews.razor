@@ -8,6 +8,7 @@
 @inject UserState UserState
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject RestApiHelper helper
 
 
 
@@ -19,50 +20,59 @@
     }
 </MudAppBar>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; min-width:600px; max-width:600px; background-color:lightgrey">
-        <MudCardContent>
-            <MudStack Row="true" Justify="Justify.FlexStart">
-                <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
-                <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
-            </MudStack>
-            @if (ViewModel.MyReviews.Count != 0)
-            {
-                <MudStack>
-                    <MudGrid Spacing="1" Style="max-width:600px">
-                        @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
-                        {
-                            <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
-                                <MudCard Style="margin-top:10px" >
-                                    <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Start" StretchItems="StretchItems.StartAndEnd">
-                                        <MudStack Row="true" Style="margin:20px;margin-right:0px;">
-                                            <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
-                                            <MudStack Style="width:max-content">
-                                                <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
-                                                <RatingComponent RatingValue=@review.rating></RatingComponent>
-                                                <MudText Class="text-ellipsis"> @review.review_text  </MudText>
-                                                <MudText Typo="Typo.body2" Align="Align.End"  Inline="true" > @review.updated_date </MudText>
-                                            </MudStack>
-                                         </MudStack>
-                                        <MudStack AlignItems="AlignItems.End"  StretchItems="StretchItems.End">
-                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(()=>HandleDeleteClick(review))"></MudIconButton>
+<div style="display: flex; justify-content: center; width: 100%; margin:20px">
+    <MudStack>
+        <MudStack Row="true" Justify="Justify.FlexStart">
+            <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
+            <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
+        </MudStack>
+        @if (ViewModel.MyReviews.Count != 0)
+        {
+            <MudStack>
+                <MudGrid Spacing="1" Style="max-width:600px">
+                    @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
+                    {
+                        <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
+                            <MudCard Style="margin-top:10px" >
+                                <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Start" StretchItems="StretchItems.StartAndEnd">
+                                    <MudStack Row="true" Style="margin:20px;margin-right:0px;">
+                                        <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
+                                        <MudStack Style="width:max-content">
+                                            <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
+                                            <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                            <MudText Class="text-ellipsis"> @review.review_text  </MudText>
+                                            <MudText Typo="Typo.body2" Align="Align.End"  Inline="true" > @review.updated_date </MudText>
                                         </MudStack>
+                                        </MudStack>
+                                    <MudStack AlignItems="AlignItems.End"  StretchItems="StretchItems.End">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(()=>HandleDeleteClick(review))"></MudIconButton>
                                     </MudStack>
-                                </MudCard>
-                            </MudItem>
-                        }
-                    </MudGrid>
-                    <MudPagination Style="justify-content: center;" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
-                </MudStack>
-            }
-        </MudCardContent>
-    </MudCard>
+                                </MudStack>
+                            </MudCard>
+                        </MudItem>
+                    }
+                </MudGrid>
+                <MudPagination Style="justify-content: center;" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+            </MudStack>
+        }
+    </MudStack>
 </div>
 
 
 
 @code {
+    
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await PageState.LoadStateAsync();
+            await UserState.LoadStateAsync();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
     private async Task GoBack()
     {
         NavigationManager.NavigateTo("/mypage");
@@ -75,7 +85,7 @@
 
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private async void HandleItemClick(ReviewWhiskeyDTO review)

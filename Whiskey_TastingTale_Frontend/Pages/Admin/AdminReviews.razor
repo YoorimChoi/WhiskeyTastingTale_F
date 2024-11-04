@@ -9,8 +9,7 @@
 @inject PageState PageState
 
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JSRuntime
-
+@inject RestApiHelper helper
 
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
@@ -75,12 +74,23 @@
 </div>
 
 @code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UserState.LoadStateAsync();
+            await PageState.LoadStateAsync();
+        }
+
+        base.OnAfterRender(firstRender);
+    }
     private async Task GoBack()
     {
         NavigationManager.NavigateTo("/admin_details");
     }
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 }
