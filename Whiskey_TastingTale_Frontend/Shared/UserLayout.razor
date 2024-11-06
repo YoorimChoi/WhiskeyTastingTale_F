@@ -1,4 +1,4 @@
-@using Whiskey_TastingTale_Backend.Data.Entities
+﻿@using Whiskey_TastingTale_Backend.Data.Entities
 
 @inherits LayoutComponentBase
 @inject UserState UserState
@@ -20,8 +20,8 @@
         </MudAvatar>
         <MudTextField @bind-Value="SelectState.SearchWord" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" FullWidth Style="margin:10px; margin-right:0px" />
         <MudBadge Content="@NotificationViewModel.NotificationNum" Color="Color.Primary" Overlap="true" Dot Origin="Origin.TopRight" Visible="@(NotificationViewModel.isDotVisible())">
-                    <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Secondary" DropShadow Size="Size.Medium" OnClick="@(() => NotificationViewModel.OpenNotificationList())" />
-                </MudBadge>
+            <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Secondary" DropShadow Size="Size.Medium" OnClick="@(() => NotificationViewModel.OpenNotificationList())" />
+        </MudBadge>
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked" Style="white-space:nowrap;margin-right:5px;margin-left:5px " Size="Size.Small">내 정보</MudButton>
         <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked" Style="white-space:nowrap;" Size="Size.Small">로그아웃</MudButton>
     </MudAppBar>
@@ -78,7 +78,7 @@
             await NotificationViewModel.LoadData();
             await NotificationViewModel.initSignalR();
 
-            StateHasChanged(); 
+            StateHasChanged();
         }
 
         base.OnAfterRender(firstRender);
@@ -112,7 +112,14 @@
 
         if (args.Key == "Enter" && SelectState.SearchWord != String.Empty)
         {
-            NavigationManager.NavigateTo("/search");
+            if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("search"))
+            {
+                NavigationManager.NavigateTo("/search", forceLoad: true);
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/search");
+            }
         }
     }
 

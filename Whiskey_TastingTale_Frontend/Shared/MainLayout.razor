@@ -80,7 +80,13 @@
 
         if (args.Key == "Enter" && SelectState.SearchWord != String.Empty)
         {
-            NavigationManager.NavigateTo("/search");
+            if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Equals("search"))
+            {
+                NavigationManager.NavigateTo("/search", forceLoad:true);
+
+            }else{
+                NavigationManager.NavigateTo("/search");
+            }
         }
     }
 }
