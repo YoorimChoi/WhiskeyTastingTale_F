@@ -136,6 +136,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
         public async Task LoadData()
         {
+            await _whiskeyState.LoadStateAsync(); 
             SelectedWhiskey = _whiskeyState.SelectedWhiskey;
             var whiskey = await _apiHelper.Get(_apiHelper.server_uri + "Whiskey/id/" + SelectedWhiskey.whiskey_id);
             if (whiskey != null)
