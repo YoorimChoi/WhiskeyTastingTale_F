@@ -9,7 +9,7 @@
 <MudPaper Class="pa-4" Elevation="3" Style="max-width: 400px; margin: auto; margin-top: 100px;">
     <MudText Typo="Typo.h5" GutterBottom="true">로그인</MudText>
     <MudForm @ref="form">
-        <MudTextField T="string" Label="사용자 이름" Variant="Variant.Outlined" @bind-Value="ViewModel.Email" Required="true" FullWidth="true" />
+        <MudTextField T="string" Label="이메일" Variant="Variant.Outlined" @bind-Value="ViewModel.Email" Required="true" FullWidth="true" />
         <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" @bind-Value="ViewModel.Password" InputType="InputType.Password" Required="true" FullWidth="true" />
         <MudText Align="Align.Center" Typo="Typo.overline"> @ViewModel.LoginResult </MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="HandleLogin" Class="mt-4">로그인</MudButton>

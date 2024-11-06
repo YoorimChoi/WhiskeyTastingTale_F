@@ -17,72 +17,57 @@
     @{
         if (UserState.Token != null)
         {
-            <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">MyPage</MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked"
+                       Style="white-space:nowrap;margin-right:5px;margin-left:5px ">내 정보</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked" Style="white-space:nowrap;">로그아웃</MudButton>
         }
         else
         {
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">login</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked" Style="white-space:nowrap;">로그인</MudButton>
         }
     }
 </MudAppBar>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <MudCard Style="margin:20px; max-width:600px; min-width:600px">
+<MudStack Justify="Justify.Center">
+    <MudCard Style="margin:10px">
         <MudCardContent>
-            <MudStack Row="true" Justify="Justify.Center">
-                <MudStack AlignItems="AlignItems.Center">
-                    <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) ObjectFit="ObjectFit.ScaleDown"></MudImage>
+            <MudStack AlignItems="AlignItems.Center">
+                <MudImage Src=@GetFullImageUrl(ViewModel.SelectedWhiskey.img_index) Style="width:50%;height:auto;" ObjectFit="ObjectFit.ScaleDown"></MudImage>
+            </MudStack>
+            <MudStack >
+                <MudText Typo="Typo.h5" Style="margin-top:20px" >@ViewModel.SelectedWhiskey.whiskey_name</MudText>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <RatingComponent RatingValue=@ViewModel.SelectedWhiskey.rating></RatingComponent>
+                    <MudText Typo="Typo.body2"> @Double.Round(ViewModel.SelectedWhiskey.rating,1) 점 / @ViewModel.SelectedWhiskey.review_count 개의 리뷰 </MudText>
                 </MudStack>
-                <MudStack >
-                    <MudText Typo="Typo.h5" >@ViewModel.SelectedWhiskey.whiskey_name</MudText>
-                    <MudStack Row="true">
-                        <RatingComponent RatingValue=@ViewModel.SelectedWhiskey.rating></RatingComponent>
-                        <MudText Typo="Typo.body2"> @Double.Round(ViewModel.SelectedWhiskey.rating,1) 점 / @ViewModel.SelectedWhiskey.review_count 개의 리뷰 </MudText>
-                    </MudStack>
-                    <MudStack Row="true">
-                        <MudText Typo="Typo.body2"><b>도수</b></MudText>
-                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.alcohol_degree%</MudText>
-                    </MudStack>
-                    <MudStack Row="true">
-                        <MudText Typo="Typo.body2"><b>제조사</b></MudText>
-                        <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.maker </MudText>
-                    </MudStack>
+                <MudStack Row="true">
+                    <MudText Typo="Typo.body2"><b>도수</b></MudText>
+                    <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.alcohol_degree%</MudText>
+                </MudStack>
+                <MudStack Row="true">
+                    <MudText Typo="Typo.body2"><b>제조사</b></MudText>
+                    <MudText Typo="Typo.body2">@ViewModel.SelectedWhiskey.maker </MudText>
                 </MudStack>
             </MudStack>
         </MudCardContent>
     </MudCard>
-</div>
-<div style="display: flex; justify-content: center; width: 100%;">
-    <MudStack>
-        <MudGrid Spacing="1" Style=" max-width:600px">
-            @if (ViewModel.Reviews.Count != 0)
-            {
-                @foreach (ReviewUserDTO review in ViewModel.Reviews)
-                {
-                    <MudItem xs="12" sm="12" md="12">
-                            <MudCard>
-                            <MudCardContent>
-                                <MudStack>
-                                    <MudStack>
-                                        <MudStack Row="true">
-                                            <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
-                                            <MudText Typo="Typo.overline"> @review.updated_date </MudText>
-                                            <MudSpacer></MudSpacer>
-                                            <RatingComponent RatingValue=@review.rating></RatingComponent>
-                                        </MudStack>
-                                        <MudText Typo="Typo.body2"> @review.review_text  </MudText>
-                                    </MudStack>
-                                </MudStack>
-                            </MudCardContent>
-                        </MudCard>
-                    </MudItem>
-                }
-            }
-        </MudGrid>
-        <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
-    </MudStack>
-</div>
+    <MudGrid Style="padding:10px;">
+        @foreach (ReviewUserDTO review in ViewModel.Reviews)
+        {
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard Style="padding:10px;">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2"> "@review.user_nickname" 님이 작성</MudText>
+                        <MudText Typo="Typo.overline"> @review.updated_date </MudText>
+                        <RatingComponent RatingValue=@review.rating></RatingComponent>
+                        <MudText Typo="Typo.body2"> @review.review_text  </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+    <MudPagination Style="justify-content: center; margin-bottom:100px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+</MudStack>
 
 <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="1">
     @if (UserState.Token != null)

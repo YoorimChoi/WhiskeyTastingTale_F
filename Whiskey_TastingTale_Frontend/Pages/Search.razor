@@ -42,13 +42,14 @@
                     </MudItem>
                 }
             </MudGrid>
-            <MudPagination Style="justify-content: center; margin-bottom:20px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
+            <MudStack Justify="Justify.Center">
+                <MudPagination Style="justify-content:center; margin-bottom:20px" Size="Size.Small" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
+             </MudStack>
         }
     </MudStack>
 </div>
 
 @code {
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

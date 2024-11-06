@@ -20,23 +20,22 @@
         <MudAvatar Square="true" @onclick="HandleHpmeClicked">
             <MudImage Src="images/icon.png"></MudImage>
         </MudAvatar>
-        <MudText Typo="Typo.h5" Class="ml-3">Whiskey_TT</MudText>
         <MudTextField @bind-Value="SelectState.SearchWord" Style="margin:20px;" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" OnKeyUp="@HandleKeyPress" />
         @{
             if (UserState.Token != null)
             {
-                <MudButton Style="margin-right:20px" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked">마이 페이지</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleMyPageClicked" Style="white-space:nowrap; margin-right:10px" Size="Size.Small">내 정보</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked" Style="white-space:nowrap;" Size="Size.Small">로그아웃</MudButton>
             }
             else
             {
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked">로그인</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLoginClicked" Style="white-space:nowrap;" Size="Size.Small">로그인</MudButton>
             }
         }
     </MudAppBar>
-    <MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Medium" Style="margin-top:100px;">
         @Body
-    </MudMainContent>
+    </MudContainer>
 </MudLayout>
 
 @code {

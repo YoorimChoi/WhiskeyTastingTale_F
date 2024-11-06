@@ -4,7 +4,7 @@
 
 @inject RestApiHelper helper
 
-<MudDialog  >
+<MudDialog style="width:80%">
     <TitleContent>
         <MudText Typo="Typo.h6">
             <MudIcon Icon="@Icons.Material.Filled.ArrowForwardIos" Class="mr-3 mb-n1" />
@@ -12,19 +12,14 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudStack>
-            <MudCard Style="min-width:500px; max-width:500px;">
-                <MudStack Row="true" Style="margin:20px;margin-right:0px;">
-                    <MudImage Src=@GetFullImageUrl(Review.img_index) Style="width:100px;"></MudImage>
-                    <MudStack>
-                        <MudText Class="text-ellipsis"><b>@Review.whiskey_name</b></MudText>
-                        <RatingComponent RatingValue=@Review.rating></RatingComponent>
-                        <MudText Class="text-ellipsis"> @Review.review_text  </MudText>
-                        <MudText Typo="Typo.body2" Align="Align.End"> @Review.updated_date </MudText>
-                    </MudStack>
-                </MudStack>
-            </MudCard>
-        </MudStack>
+        <MudCard >
+            <MudCardContent>
+                <MudText Typo="Typo.body1" Class="text-ellipsis"><b>@Review.whiskey_name</b></MudText>
+                <MudText Typo="Typo.caption"> @Review.updated_date </MudText>
+                <RatingComponent RatingValue=@Review.rating></RatingComponent>
+                <MudText Typo="Typo.body2" Class="text-ellipsis" Style ="margin-top:5px"> @Review.review_text  </MudText>
+            </MudCardContent>
+        </MudCard>
     </DialogContent>
     <DialogActions>
         <MudButton Color="Color.Error" OnClick="HandleClose">닫기</MudButton>
