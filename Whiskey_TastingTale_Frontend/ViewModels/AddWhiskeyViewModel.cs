@@ -128,12 +128,16 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         {
             try
             {
-                using var stream = file.OpenReadStream(maxAllowedSize:10* 1024 * 1024);
+                using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 1024);
                 using var image = await SixLabors.ImageSharp.Image.LoadAsync(stream);
 
                 var ratio = image.Width / 370;
+                if (ratio != 0)
+                {
+                    image.Mutate(x => x.Resize(image.Width / ratio, image.Height / ratio));
+                }
+
                 // 이미지 크기를 50%로 줄이기
-                image.Mutate(x => x.Resize(image.Width / ratio, image.Height / ratio));
 
                 // 압축 설정 (JPEG로 70% 화질)
                 var encoder = new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder
@@ -184,7 +188,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
                 var content = new MultipartFormDataContent();
 
                 // 파일을 스트림으로 읽어들임
-                var fileContent = new StreamContent(File.OpenReadStream(maxAllowedSize: 1024 * 1024)); // 15MB 제한
+                var fileContent = new StreamContent(File.OpenReadStream(maxAllowedSize: 1024 * 1024 * 1024)); 
                 fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(File.ContentType);
 
                 // 파일 데이터 추가
@@ -192,10 +196,15 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
 
                 // API 호출하여 파일 업로드
                 var response = await _helper.PostImage(_helper.server_uri + "File/upload", content);
-                //var response = await Http.PostAsync("https://localhost:7299/api/upload", content);
+
+                if (response.ToString().Contains("[ERR]"))
+                {
+                    RegisterResult = "서비스가 원활하지 않습니다. 등록에 실패하였습니다.";
+                    return false;
+                }
                 image_index = response.ToString();  
             }
-
+            await _userState.LoadStateAsync(); 
             var request = new WhiskeyRequest
             {
                 alcohol_degree = AlcoholDegree,
