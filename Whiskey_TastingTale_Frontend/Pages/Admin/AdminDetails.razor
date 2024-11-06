@@ -78,6 +78,7 @@
             await UserState.LoadStateAsync();
 
             await ViewModel.LoadData();
+            StateHasChanged();
         }
 
         base.OnAfterRender(firstRender);
