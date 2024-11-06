@@ -7,7 +7,7 @@
 @inject DetailsViewModel ViewModel
 @inject UserState UserState
 @inject PageState PageState
-
+@inject RestApiHelper helper
 @inject NavigationManager NavigationManager
 
 
@@ -103,7 +103,7 @@
     }
     private string GetFullImageUrl(string imagePath)
     {
-        return "https://localhost:7299/images/" + imagePath;
+        return helper.server_uri + "images/" + imagePath;
     }
 
     private void AddReview()
