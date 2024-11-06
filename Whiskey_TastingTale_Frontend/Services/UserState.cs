@@ -33,7 +33,6 @@ namespace Whiskey_TastingTale_Frontend.Services
             {
                 token = value;
                 _ = SaveStateAsync(); // 상태 변경 시 저장
-                NotifyStateChanged();
             }
         }
 
@@ -60,7 +59,7 @@ namespace Whiskey_TastingTale_Frontend.Services
         public void init()
         {
             Token = null;
-            user = new User()
+            User = new User()
             {
                 user_id = -1,
                 role = null,
