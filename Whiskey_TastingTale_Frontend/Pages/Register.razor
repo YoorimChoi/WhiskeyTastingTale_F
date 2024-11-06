@@ -9,37 +9,31 @@
 <MudPaper Class="pa-4" Elevation="3" Style="max-width: 400px; margin: auto; margin-top: 100px;">
     <MudText Typo="Typo.h5" GutterBottom="true">회원가입</MudText>
     <MudForm>
-        <MudStack Row="true" >
-            <MudTextField T="string" Label="이메일" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Email" FullWidth="true" />
+        <MudStack Row="true" AlignItems="AlignItems.Center" >
+            <MudTextField T="string" Label="이메일" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Email"  Style="width:100%" />
             <MudStack Spacing="0">
                 <MudButton 
-                    Style="white-space: nowrap;height: 30px; margin-top:10px;" 
-                    Size="Size.Small" 
+                    Style="white-space: nowrap;" 
                     Color="Color.Secondary" 
                     Variant="Variant.Outlined"
                     OnClick="@ViewModel.CheckDuplicationEmail">중복 체크</MudButton>
                 <MudText Align="Align.End" Typo="Typo.overline">@ViewModel.EmailDuplicationCheck</MudText>
             </MudStack>
         </MudStack>
-        <MudStack Row="true">
-            <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Password" InputType="InputType.Password" FullWidth="true" />
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-            <MudSpacer></MudSpacer>
-        </MudStack>
-        <MudStack Row="true">
-            <MudTextField T="string" Label="닉네임" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Nickname" FullWidth="true" />
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudTextField T="string" Label="비밀번호" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Password" InputType="InputType.Password" Style="width:100%"  />
             <MudStack Spacing="0">
-                <MudButton 
-                    Style="white-space: nowrap;height: 30px; margin-top:10px;" 
-                    Size="Size.Small" 
-                    Color="Color.Secondary" 
+                <MudButton Style="white-space: nowrap; visibility:hidden" Variant="Variant.Outlined">중복 체크</MudButton>
+                <MudText Align="Align.End" Typo="Typo.overline">  </MudText>
+            </MudStack>
+        </MudStack>
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudTextField T="string" Label="닉네임" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Nickname" Style="width:100%" />
+            <MudStack Spacing="0">
+                <MudButton Style="white-space: nowrap;"
+x                           Color="Color.Secondary" 
                     Variant="Variant.Outlined"
-                    OnClick="@ViewModel.CheckDuplicationNickname">중복체크</MudButton>
+                    OnClick="@ViewModel.CheckDuplicationNickname">중복 체크</MudButton>
                 <MudText Align="Align.End" Typo="Typo.overline"> @ViewModel.NicknameDuplicationCheck </MudText>
             </MudStack>
         </MudStack>

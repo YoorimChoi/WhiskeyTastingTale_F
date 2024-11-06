@@ -16,12 +16,12 @@
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
 </MudAppBar>
 
-<MudStack Style="max-width: 600px; margin: auto; margin-top: 100px;">
-    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
-        <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+<MudStack Style="padding:10px" >
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Medium" />
+        <MudText Typo="Typo.subtitle1"> <b>위스키 등록 요청 목록</b>  </MudText>
     </MudStack>
-    <MudDataGrid Style="margin:20px;margin-bottom:0px;" Items="@ViewModel.RequestList">
+    <MudDataGrid Items="@ViewModel.RequestList">
         <Columns>
             <PropertyColumn Property="x => x.name" Title="위스키 이름" />
             <TemplateColumn Title ="결과">
@@ -49,7 +49,6 @@
             </TemplateColumn>
             <TemplateColumn>
                 <CellTemplate>
-                    <MudStack Row Justify="Justify.Center">
                         @if (context.Item.is_accepted == true)
                         {
                             <MudButton Size="@Size.Small" FullWidth="true" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(()=> HandleMoveWhiskeyInfo(context.Item))">이동</MudButton>
@@ -60,17 +59,21 @@
                         }
                         else
                         {
-                            <MudText>-</MudText>
+                            <MudStack Row Justify="Justify.Center">
+                                <MudText>-</MudText>
+                            </MudStack>
                         }
-                    </MudStack>
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
+        <PagerContent>
+            <MudDataGridPager PageSizeOptions="@(new int[]{3,5,10})" />
+        </PagerContent>
     </MudDataGrid>
-    <div style="display:flex; justify-content:end;margin:20px;margin-bottom:10px">
+    <MudStack AlignItems="AlignItems.End">
         <MudText Typo="Typo.caption"> @ViewModel.DeleteResult </MudText>
         <MudButton Size="@Size.Small" Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleAddWhiskey">위스키 추가 요청</MudButton>
-    </div>
+    </MudStack>
 </MudStack>
 @code{
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -79,6 +82,8 @@
         {
             await PageState.LoadStateAsync();
             await ViewModel.LoadData();
+         
+            StateHasChanged();
         }
 
         base.OnAfterRender(firstRender);

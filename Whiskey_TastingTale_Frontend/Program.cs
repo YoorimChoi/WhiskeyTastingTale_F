@@ -1,13 +1,16 @@
 using Elastic.Apm.AspNetCore;
 using MudBlazor.Services;
+using Whiskey_TastingTale_Frontend;
 using Whiskey_TastingTale_Frontend.Services;
 using Whiskey_TastingTale_Frontend.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents(); 
+
+
 builder.Services.AddScoped<LoginViewModel>();
 builder.Services.AddScoped<SearchViewModel>();
 builder.Services.AddScoped<DetailsViewModel>();
@@ -32,12 +35,6 @@ builder.Services.AddSingleton(new CustomMudTheme());
 
 builder.Services.AddElasticApm();
 
-builder.Services.AddServerSideBlazor()
-    .AddCircuitOptions(options =>
-    {
-        options.DisconnectedCircuitMaxRetained = 100;
-        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
-    });
 
 builder.Services.AddHttpsRedirection(options =>
 {
@@ -46,20 +43,15 @@ builder.Services.AddHttpsRedirection(options =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+
 app.UseElasticApm();
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseAntiforgery();
 
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();

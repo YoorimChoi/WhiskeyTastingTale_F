@@ -1,0 +1,57 @@
+﻿
+@inject UserState UserState
+
+<CascadingValue Value="UserState">
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@SelectLayoutBasedOnRole" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingValue>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            UserState.OnChange += HandleChagneUserState; 
+            await UserState.LoadStateAsync();
+            StateHasChanged(); 
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
+    private void HandleChagneUserState(){
+        StateHasChanged();
+    }
+
+    private Type SelectLayoutBasedOnRole
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(UserState.Token))
+            {
+                if (UserState.Role.Equals("admin"))
+                {
+                    return typeof(AdminLayout);
+                }
+                else if (UserState.Role.Equals("user"))
+                {
+                    return typeof(UserLayout);
+                }
+            }
+            else
+            {
+                return typeof(MainLayout);
+            }
+            return typeof(MainLayout);
+        }
+    }
+}

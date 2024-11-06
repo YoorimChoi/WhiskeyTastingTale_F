@@ -17,7 +17,7 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
         private int page = 1;
         private int pageSize = 10;
         private int totalPage = 1;
-        private string searchOption;
+        private string searchOption = "전체";
         private string searchString; 
 
         public ReviewManagementViewMdoel(RestApiHelper helper)

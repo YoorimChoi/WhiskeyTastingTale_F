@@ -15,48 +15,50 @@
 <MudAppBar>
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
     <MudSpacer></MudSpacer>
-    @{
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">logout</MudButton>
-    }
+    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="HandleLogoutClicked">로그아웃</MudButton>
 </MudAppBar>
 
-<div style="display: flex; justify-content: center; width: 100%; margin:20px">
-    <MudStack>
-        <MudStack Row="true" Justify="Justify.FlexStart">
-            <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small"/>
-            <MudText Typo="Typo.body2"> <b>내 리뷰</b>  </MudText>
+<MudGrid Style="padding:10px" Spacing="2">
+    <MudItem xs="12" sm="12" md="12">
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Medium"/>
+            <MudText Typo="Typo.subtitle1"> <b>내 리뷰 목록</b>  </MudText>
         </MudStack>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12">
         @if (ViewModel.MyReviews.Count != 0)
         {
-            <MudStack>
-                <MudGrid Spacing="1" Style="max-width:600px">
+            <MudStack AlignItems="AlignItems.Center" Spacing="2">
+                <MudGrid Spacing="1">
                     @foreach (ReviewWhiskeyDTO review in ViewModel.MyReviews)
                     {
-                        <MudItem xs="12" sm="12" md="12" @onclick="@(()=>HandleItemClick(review))">
-                            <MudCard Style="margin-top:10px" >
-                                <MudStack Spacing="0" Row="true" AlignItems="AlignItems.Start" StretchItems="StretchItems.StartAndEnd">
-                                    <MudStack Row="true" Style="margin:20px;margin-right:0px;">
-                                        <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:100px;"></MudImage>
-                                        <MudStack Style="width:max-content">
-                                            <MudText Class="text-ellipsis"><b>@review.whiskey_name</b></MudText>
-                                            <RatingComponent RatingValue=@review.rating></RatingComponent>
-                                            <MudText Class="text-ellipsis"> @review.review_text  </MudText>
-                                            <MudText Typo="Typo.body2" Align="Align.End"  Inline="true" > @review.updated_date </MudText>
+                        <MudItem xs="12" sm="6" md="6" @onclick="@(()=>HandleItemClick(review))">
+                            <MudCard Style="padding:10px;"> 
+                                <MudCardContent>
+                                    <MudStack Row>
+                                        <MudImage Src=@GetFullImageUrl(review.whiskey_img_index) Style="width:40%;height:auto;object-fit:contain;"></MudImage>
+                                        <MudStack Style="width:100%">
+                                            <MudStack>
+                                                <MudText Typo="Typo.body2"><b>@review.whiskey_name</b></MudText>
+                                                <MudText Typo="Typo.caption"> @review.updated_date </MudText>
+                                                <RatingComponent RatingValue=@review.rating></RatingComponent>
+                                                <MudText Typo="Typo.body2"> @review.review_text  </MudText>
+                                            </MudStack>
+                                            <MudStack AlignItems="AlignItems.End">
+                                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" @onclick="@(()=>HandleDeleteClick(review))"></MudIconButton>
+                                            </MudStack>
                                         </MudStack>
-                                        </MudStack>
-                                    <MudStack AlignItems="AlignItems.End"  StretchItems="StretchItems.End">
-                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(()=>HandleDeleteClick(review))"></MudIconButton>
                                     </MudStack>
-                                </MudStack>
+                                </MudCardContent>
                             </MudCard>
                         </MudItem>
                     }
                 </MudGrid>
-                <MudPagination Style="justify-content: center;" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
+                <MudPagination ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.ReviewTotalPage" SelectedChanged="ViewModel.ReviewPagesChanged" />
             </MudStack>
         }
-    </MudStack>
-</div>
+    </MudItem>
+</MudGrid>
 
 
 

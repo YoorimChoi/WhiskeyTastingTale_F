@@ -11,16 +11,19 @@
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
 </MudAppBar>
 
-<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 100px;" >
-    <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
-        <MudText Typo="Typo.body2"> <b>위스키 등록 요청</b>  </MudText>
+<MudPaper Elevation="3" Style="padding:10px" >
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Medium" />
+        <MudText Typo="Typo.subtitle1"> <b>위스키 등록 요청</b>  </MudText>
     </MudStack>
-    <MudText Style="margin-top:20px" Typo="Typo.subtitle1"> <b>이미지 업로드 </b> </MudText>
-    <MudImage Src="@ViewModel.UploadedImage" Style="width: 570px; height: 350px; " ObjectFit="ObjectFit.ScaleDown"></MudImage>
-    <div style="justify-content:end;display:flex;">
-    <MudText Typo="Typo.caption"> @ViewModel.UploadResult</MudText>
-    </div>
+
+    <MudText Style="margin-top:20px" Typo="Typo.subtitle1"> <b>* 이미지 </b> </MudText>
+    <MudStack Justify="Justify.Center">
+        <MudImage Src="@ViewModel.UploadedImage" Style="height:300px;width:auto;" ObjectFit="ObjectFit.ScaleDown"></MudImage>
+    </MudStack>
+    <MudStack Justify="Justify.FlexEnd">
+        <MudText Typo="Typo.caption"> @ViewModel.UploadResult</MudText>
+    </MudStack>
     <InputFile OnChange="@ViewModel.HandleFileSelected" accept="image/*" style="justify-self:flex-end; "/>
     <MudForm Style = "margin-top:20px;" @ref="form">
         <MudTextField T="string" Label="위스키 이름" Variant="Variant.Outlined" Required="true" @bind-Value="ViewModel.Name" FullWidth="true" />

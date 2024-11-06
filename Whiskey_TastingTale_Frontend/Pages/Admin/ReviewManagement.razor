@@ -12,41 +12,43 @@
     <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" @onclick="GoBack"> </MudIconButton>
 </MudAppBar>
 
-<MudPaper Class="pa-4" Elevation="3" Style="max-width: 600px; margin: auto; margin-top: 50px;">
-    <MudStack>
-        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-            <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Small" />
-            <MudText Typo="Typo.body2"> <b>리뷰 관리</b>  </MudText>
-        </MudStack>
-        <MudDataGrid Style="margin:20px;margin-bottom:0px;" Items="@ViewModel.Reviews" > 
-            <ToolBarContent>
-                <MudSpacer></MudSpacer>
-                <MudSpacer></MudSpacer>
-                <MudSelect @bind-Value="ViewModel.SearchOption" Style="max-width:100px; min-width:100px;" Required>
-                    <MudSelectItem Value="@(new string("전체"))">전체</MudSelectItem>
-                    <MudSelectItem Value="@(new string("닉네임"))">닉네임</MudSelectItem>
-                    <MudSelectItem Value="@(new string("위스키명"))">위스키명</MudSelectItem>
-                </MudSelect>
-                <MudTextField Placeholder="Search" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                              @bind-Value="ViewModel.SearchString" Immediate="true" Class="mt-0" OnKeyUp="ViewModel.HandleChangedSearchString"></MudTextField>
-                <MudButton Style="margin-left:10px;" Variant="@Variant.Filled" OnClick="ViewModel.SearchClear"> 초기화 </MudButton>
-            </ToolBarContent> 
-            <Columns>
-                <PropertyColumn Property="x => x.whiskey_name" Title="위스키명" />
-                <PropertyColumn Property="x => x.user_nickname" Title="닉네임" HeaderStyle="white-space: nowrap;" />
-                <TemplateColumn >
-                    <CellTemplate>
-                        <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Style="white-space: nowrap;" OnClick="@(()=> HandleShowReviewDetail(context.Item))">세부정보</MudButton>
-                    </CellTemplate>
-                </TemplateColumn>
-                <TemplateColumn >
-                    <CellTemplate>
-                        <MudButton Size="@Size.Small" FullWidth="true" Variant="@Variant.Filled" Color="@Color.Secondary" OnClick="@(()=> HandleShowDelete(context.Item))">삭제</MudButton>
-                    </CellTemplate>
-                </TemplateColumn>
-            </Columns>
-        </MudDataGrid>
-        <MudPagination Style="justify-content: center; margin-bottom:20px" ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
+<MudPaper Class="pa-4" Elevation="3" Style="margin:10px; padding:10px">
+    <MudStack Row AlignItems="AlignItems.Center">
+        <MudIcon Icon="@Icons.Material.Filled.Chat" Size="Size.Medium" />
+        <MudText Typo="Typo.subtitle1"> <b>리뷰 관리</b>  </MudText>
+    </MudStack>
+    <MudDataGrid Items="@ViewModel.Reviews" Style="margin-top:10px" > 
+        <ToolBarContent>
+            <MudSpacer></MudSpacer>
+            <MudSpacer></MudSpacer>
+            <MudSelect @bind-Value="ViewModel.SearchOption" Style="max-width:100px; min-width:100px;" Required>
+                <MudSelectItem Value="@(new string("전체"))">전체</MudSelectItem>
+                <MudSelectItem Value="@(new string("닉네임"))">닉네임</MudSelectItem>
+                <MudSelectItem Value="@(new string("위스키명"))">위스키명</MudSelectItem>
+            </MudSelect>
+            <MudTextField Placeholder="Search" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
+                            @bind-Value="ViewModel.SearchString" Immediate="true" Class="mt-0" OnKeyUp="ViewModel.HandleChangedSearchString"></MudTextField>
+            <MudButton Variant="@Variant.Filled" OnClick="ViewModel.SearchClear" 
+                Style="white-space:nowrap;margin-left:5px;" Size="Size.Small"> 초기화 
+            </MudButton>
+        </ToolBarContent> 
+        <Columns>
+            <PropertyColumn Property="x => x.whiskey_name" Title="위스키명" />
+            <PropertyColumn Property="x => x.user_nickname" Title="닉네임" />
+            <TemplateColumn >
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Style="white-space: nowrap;" FullWidth="true" OnClick="@(()=> HandleShowReviewDetail(context.Item))">세부 정보</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn >
+                <CellTemplate>
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Secondary" Style="white-space: nowrap;" FullWidth="true" OnClick="@(()=> HandleShowDelete(context.Item))">삭제</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+    <MudStack AlignItems="AlignItems.Center" Style="margin-top:10px">
+        <MudPagination ShowFirstButton="true" ShowLastButton="true" Count="ViewModel.TotalPage" SelectedChanged="ViewModel.PageChanged" />
     </MudStack>
 </MudPaper>
 

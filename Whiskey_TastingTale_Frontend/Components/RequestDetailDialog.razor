@@ -3,16 +3,16 @@
 
 @inject RestApiHelper helper
 
-<MudDialog  >
+<MudDialog style="width:80%">
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.ArrowForwardIos" Class="mr-3 mb-n1" />
-            요청 세부 정보 
+            <MudIcon Icon="@Icons.Material.Filled.ArrowForwardIos" />
+            요청 세부 정보
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudStack>
-            <MudImage Src=@GetFullImageUrl(Request.img_index) Style="width:auto; height: 250px; min-width:450px " ObjectFit="ObjectFit.ScaleDown"></MudImage>
+        <MudStack >
+            <MudImage Src=@GetFullImageUrl(Request.img_index) Style="height: 300px; width:auto;" ObjectFit="ObjectFit.ScaleDown"></MudImage>
             @if (isModifyAvailble)
             {
                 @if (isModify)

@@ -190,5 +190,12 @@ namespace Whiskey_TastingTale_Frontend.ViewModels
             Page = i;
             await LoadData();
         }
+
+        public bool isDotVisible()
+        {
+            var count = Notifications.Where(x => x.is_read == false).Count(); 
+            if(count > 0) return true;
+            return false; 
+        }
     }
 }
